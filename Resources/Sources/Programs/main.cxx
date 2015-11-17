@@ -81,7 +81,7 @@ int main( int argc, char** argv )
 		               //Ntuple_reader :: Loop_request_flags :: run_tree_loop_request   |
 		               Ntuple_reader :: Loop_request_flags :: clust_tree_loop_request |
 		               Ntuple_reader :: Loop_request_flags :: traj_tree_loop_request  |
-		               0; //
+		               0;
 
 		/******************************************************************************************************/
 		/*                                     Initializing the data files                                    */
