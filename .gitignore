@@ -1,4 +1,4 @@
 *.root
-Data/*
-Results/*
+Data/*.root
+Results/*.root
 Jegyzet.txt
