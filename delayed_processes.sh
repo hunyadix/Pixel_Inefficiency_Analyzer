@@ -1,0 +1,14 @@
+#!/bin/bash
+
+kill -STOP 32568 31195 896 31563 32394 32148 3077 1445 1637 1813
+
+kill -CONT 32568 31195
+sleep 2h
+kill -CONT 896 31563
+sleep 2h
+kill -CONT 32394 32148
+sleep 2h
+kill -CONT 3077 1445
+sleep 2h
+kill -CONT 1637 1813
+

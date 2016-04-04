@@ -1,0 +1,241 @@
+/******************************************************************************************************/
+/*                                                                                                    */
+/*                      Program to loop through TimingStudy Ntuples and perform                       */
+/*                      efficiency analysis.                                                          */
+/*                      Date: 2015. CMSSW version: CMSSW_7_5_0                                        */
+/*                      Author: Adam Hunyadi                                                          */
+/*                      E-mail: hunyadix@gmail.com                                                    */
+/*                                                                                                    */
+/******************************************************************************************************/
+
+#include "../Includes/Ntuple_reader/Ntuple_reader.hh"
+#include "../Includes/Timer/Timer_colored.hh"
+#include "../Includes/Console_colors/Console_colors.hh"
+#include "../Includes/Console_actor/Console_actor.hh"
+#include "../Includes/Console_actor/common_actors.hh"
+
+#include "TCanvas.h"
+#include "TPad.h"
+#include "TH2.h"
+#include "TFile.h"
+#include "TF1.h"
+#include "TTree.h"
+
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <sstream>
+
+int post_loop_program(int argc, char** argv, const std::string& input_file_name, double number_of_sigmas_scope, double& badroc_limit);
+int layer_1_efficiency_loop(int argc, char** argv, const std::string& input_file_name, const std::string& output_file_name, double& badroc_limit);
+
+/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                                                                                    */
+/*                                    Important function: main()                                      */
+/*                                                                                                    */
+/******************************************************************************************************/
+/******************************************************************************************************/
+
+int main(int argc, char** argv)
+{
+
+	/******************************************************************************************************/
+	/*                                       Setting up the project                                       */
+	/******************************************************************************************************/
+
+	system("clear");
+	std::string process_name(argv[0]);
+	if(process_name.find("./", 0, 2) != std::string::npos)
+	{
+		process_name = process_name.substr(process_name.find("./", 0, 2) + 2);
+	}
+	std::cout << process_prompt << process_name << " is being executed..." << std::endl;
+
+	int skip_loops                 = 1;
+	double number_of_sigmas_scope  = 5;
+	std::string input_file_name  = "./Data/Ntuple.root";
+	std::string output_file_name = "./Results/Inefficiency_results.root";
+
+	/******************************************************************************************************/
+	/*                                     Initializing the data files                                    */
+	/******************************************************************************************************/
+	
+		
+	if(!skip_loops)
+	{
+		Timer* timer = new Timer_colored(timer_prompt);
+		Ntuple_reader* ntuple_reader = new Ntuple_reader(input_file_name);
+		ntuple_reader -> set_output_file(output_file_name, "RECREATE");
+
+		/******************************************************************************************************/
+		/*                                        Configuring the run                                         */
+		/******************************************************************************************************/
+
+		timer -> restart("configuring parameters...");
+		ntuple_reader -> set_output_directory("Layer_1", "CREATE");
+
+		/*__________________________________________1D Histograms____________________________________________*/
+
+
+		/*__________________________________________2D Histograms____________________________________________*/
+
+		ntuple_reader -> request_histogram("clustTree", "cluster_occupancy", "Clusters_in_ROCs",    "Module;Ladder", 72, -4.5, 4.5, 42, -10.5, 10.5);
+		ntuple_reader -> request_histogram("trajTree",  "ROC_total_hits",    "Total_hits_in_ROCs",  "Module;Ladder", 72, -4.5, 4.5, 42, -10.5, 10.5);
+		ntuple_reader -> request_histogram("trajTree",  "ROC_validhits",     "Valid_hits_in_ROCs",  "Module;Ladder", 72, -4.5, 4.5, 42, -10.5, 10.5);
+
+		timer -> print_seconds("Took about ", " second(s).");
+
+		/******************************************************************************************************/
+		/*                                  Looping through the Ntuple files                                  */
+		/******************************************************************************************************/
+
+		timer -> restart("Running tree loops...");
+		ntuple_reader -> run();
+		timer -> print_seconds("Took about ", " second(s).");
+
+		/******************************************************************************************************/
+		/*                                             Terminating                                            */
+		/******************************************************************************************************/
+
+		delete ntuple_reader;
+		gDirectory -> Clear();
+	}
+
+	double badroc_limit = 0;
+
+	int post_loop_program_end_results = post_loop_program(argc, argv, output_file_name, number_of_sigmas_scope, badroc_limit);
+	if(post_loop_program_end_results == 1)
+	{
+		std::cout << error_prompt << "Post loops seem to have invalid results. (might ended with failure?)" << std::endl;
+	}
+	/*int layer_1_efficiency_loop_results = layer_1_efficiency_loop(argc, argv, input_file_name, output_file_name, badroc_limit);
+	if(layer_1_efficiency_loop_results == 1)
+	{
+		std::cout << error_prompt << "layer_1_efficiency_loop seem to have invalid results. (might ended with failure?)" << std::endl;
+	}*/
+	std::cout << process_prompt << process_name << " terminated succesfully." << std::endl;
+	return 0; 
+
+}
+
+
+/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                                                                                    */
+/*                               Important function: post_loop_program()                              */
+/*                                                                                                    */
+/******************************************************************************************************/
+/******************************************************************************************************/
+
+
+int post_loop_program(int argc, char** argv, const std::string& input_file_name, double number_of_sigmas_scope, double& badroc_limit)
+{
+	std::string process_name(argv[0]);
+	if(process_name.find("./", 0, 2) != std::string::npos)
+	{
+		process_name = process_name.substr(process_name.find("./", 0, 2) + 2);
+	}
+	std::cout << process_prompt << process_name << " is now looking for the cut value for good ROCs..." << std::endl;
+	std::cout << process_prompt << "Good ROC scope: " << std::setprecision(2) << number_of_sigmas_scope << "." << std::endl;
+	Timer* timer = new Timer_colored(timer_prompt);
+
+	/******************************************************************************************************/
+	/*                                     Initializing the data files                                    */
+	/******************************************************************************************************/
+
+	std::string output_file_name(input_file_name);
+
+	Input_output_interface* input_output_interface = new Input_output_interface();
+	input_output_interface -> set_output_file(output_file_name, "UPDATE");
+	input_output_interface -> set_output_directory("Layer_1", "");
+
+	/******************************************************************************************************/
+	/*                          Calculating the minimum efficiency of good ROCS                           */
+	/******************************************************************************************************/
+
+	timer -> restart("Calculating the minimum efficiency of good ROCs...");
+	TH2D* hit_efficiency_histo = static_cast<TH2D*>(input_output_interface -> get_histogram_from_output("HitEfficiency_vs_Ladders_vs_Modules_Lay1/HitEfficiency_vs_Ladders_vs_Modules_Lay1"));
+	if(!hit_efficiency_histo)
+	{
+		std::cerr << error_prompt << "Error finding the hit efficiency histograms." << std::endl;
+		exit(-1);
+	}
+	TH1D* roc_efficiency_distribution = new TH1D("ROC_efficiency_distribution", "ROC efficiency distribution;efficiency;num_rocs", 1000, 0.0, 1.0);
+	for(int module_bin = 1; module_bin <= 72; ++module_bin)
+	{
+		for(int ladder_bin = 1; ladder_bin <= 42; ++ladder_bin)
+		{
+			roc_efficiency_distribution -> Fill(valid_hits / total_hits - 0.0005);
+		}
+	}
+
+	TF1* roc_efficiency_distribution_fit = new TF1("roc_efficiency_distribution_fit", "gaus", 0.0, 1.0);
+	roc_efficiency_distribution_fit -> FixParameter(0, 0);
+	roc_efficiency_distribution -> Fit(roc_efficiency_distribution_fit, "WWQMC");
+	input_output_interface -> save_histogram_as_canvas(roc_efficiency_distribution);
+
+	roc_efficiency_distribution_fit -> Write();
+	std::cout << process_prompt << "Sigma parameter calculated: " << roc_efficiency_distribution_fit -> GetParameter(2) << std::endl;
+	badroc_limit = roc_efficiency_distribution_fit -> GetParameter(1) - 5 * (roc_efficiency_distribution_fit -> GetParameter(2));
+	std::cout << process_prompt << "Minimum efficiency of good ROCs: " << badroc_limit << std::endl; 
+	timer -> print_seconds("Took about ", " second(s).");
+
+	//gDirectory -> Clear();
+
+	return 0;
+}
+
+/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                                                                                    */
+/*                            Important function: layer_1_efficiency_loop()                           */
+/*                                                                                                    */
+/******************************************************************************************************/
+/******************************************************************************************************/
+
+int layer_1_efficiency_loop(int argc, char** argv, const std::string& input_file_name, const std::string& output_file_name, double& badroc_limit)
+{
+	std::string process_name(argv[0]);
+	if(process_name.find("./", 0, 2) != std::string::npos)
+	{
+		process_name = process_name.substr(process_name.find("./", 0, 2) + 2);
+	}
+	std::cout << process_prompt << process_name << " is now calculating the dynamic efficiency of the ROCs in layer 1..." << std::endl;
+	Timer* timer = new Timer_colored(timer_prompt);
+
+	Ntuple_reader* ntuple_reader = new Ntuple_reader(input_file_name);
+	ntuple_reader -> set_output_file(output_file_name, "UPDATE");
+
+	timer -> restart("configuring parameters...");
+	ntuple_reader -> set_output_directory("Layer_1", "");
+	TH1D* total_hits_histo = static_cast<TH1D*>(ntuple_reader -> get_histogram_from_input("Layer_1/Total_hits_in_ROCs"));
+
+	/*__________________________________________1D Histograms____________________________________________*/
+
+	ntuple_reader -> request_histogram(badroc_limit, total_hits_histo, "trajTree",  "Good_and_bad_reghits", "Good_and_bad_reghits",  "0: bad, 1: good;number of hits", 2, 0.0, 1.0);
+
+	/*__________________________________________2D Histograms____________________________________________*/
+
+
+	timer -> print_seconds("Took about ", " second(s).");
+
+	timer -> restart("Running tree loops...");
+	ntuple_reader -> run();
+	timer -> print_seconds("Took about ", " second(s).");
+
+	/*TH1D* good_and_bad_reghits_histo = static_cast<TH1D*>(ntuple_reader -> get_histogram_from_input("Layer_1/Good_and_bad_reghits"));
+	double good_reghits = good_and_bad_reghits_histo -> GetBinContent(2);
+	double bad_reghits = good_and_bad_reghits_histo -> GetBinContent(1);
+	double dynamic_efficiency = good_reghits / (good_reghits + bad_reghits);
+
+	std::cout << process_prompt << "Efficiency analysis results for layer_1: " << std::endl;
+	std::cout << process_prompt << "Hits on layer_1: " << std::setprecision(1) << good_reghits + bad_reghits
+	                              << ". Total hits on layer_1: " << std::setprecision(1) << good_reghits << "." << std::endl;
+	std::cout << process_prompt << "Dynamic efficiency of layer_1 : " << std::setprecision(4) << dynamic_efficiency << "." << std::endl;*/
+
+	delete ntuple_reader;
+
+	gDirectory -> Clear();
+	return 0;
+}

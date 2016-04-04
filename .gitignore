@@ -1,0 +1,39 @@
+# Compressed Files
+*.root
+*.zip
+*.rar
+
+# Pictures
+*.gif
+*.eps
+*.jpg
+*.pdf
+*.png
+
+# Executables
+./Pixel_Inefficiency_Analyzer
+*_process
+
+# Data files
+Data/*
+
+# Results
+Results/*
+
+# Logs
+*.log
+
+# References
+#References/*
+
+# Notes
+*.todo
+Jegyzet.txt
+Jegyzet.md
+
+# Sublime text files
+*.sublime-*
+
+# Instlumi and pileup maps
+Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2012.txt
+Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2015.txt

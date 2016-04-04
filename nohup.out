@@ -1,0 +1,8 @@
+./delayed_processes.sh: line 7: kill: (896) - No such process
+./delayed_processes.sh: line 7: kill: (31563) - No such process
+./delayed_processes.sh: line 9: kill: (32394) - No such process
+./delayed_processes.sh: line 9: kill: (32148) - No such process
+./delayed_processes.sh: line 11: kill: (3077) - No such process
+./delayed_processes.sh: line 11: kill: (1445) - No such process
+./delayed_processes.sh: line 13: kill: (1637) - No such process
+./delayed_processes.sh: line 13: kill: (1813) - No such process

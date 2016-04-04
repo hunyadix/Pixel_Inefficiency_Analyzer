@@ -1,0 +1,117 @@
+# Pileup eloszlás recept
+	/data/jkarancs/CMSSW/LumiDB/howto_RunII.txt
+
+# Pileup reweighting validáláshoz
+	# Adatok
+	/data/gridout/jkarancs/TimingStudy/2015/ZeroBias/v3836_INC_SPL2_pt0_763p2_76X_dataRun2_v16_Feb05MuonJSON_2232b/0000/
+	# Eloszlás
+	/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/input/pileup_data_2232b_69mb.root
+	# Validáláshoz használt mc filek
+	/data/gridout/jkarancs/TimingStudy/2015/MinBias_TuneCUETP8M1_13TeV-pythia8/v3836_INC_SPL2_pt0_763p2_76X_mcRun2_asymptotic_v14_DynIneffDBv2/160303_121841/
+
+Validálni event.nvertex alapján
+
+# Dcolscanek elkészítése
+	# Dcolscan montecarlok futtatási heley
+	/data/hunyadi/CMSSW/dynmc80x/CMSSW_8_0_3_patch1/src/Dcolscan
+	# Mérési pontok
+	{1, 0.999, 0.996, 0.993, 0.99, 0.98, 0.97, 0.95, 0.90, 0.80}
+	# Mérési pontok
+
+	# Generált mc-k elérési helye
+	/data/gridout/mbartok/DynIneff/RUN2_13TeV_50ns/DcolScan #outdated
+	# Bemeneti fileok
+	Data/Dcolscans/
+	# Dcolscan kimenetek
+	Results/Dcolscans/
+	# Hit efficiency vs Layer plot neve
+	HitEfficiency_vs_Layers/HitEfficiency_vs_Layers
+
+# Adatbázis fájl elkészítése 
+
+# Adatbázis alapján job submitálás
+
+# ROC-szelekció
+
+# ROC efficiency scanek elkészítése
+	# Monte Carlo konfigok elérési helye 
+	/data/hunyadi/CMSSW/Dynamic_Inefficiency_MC_16_2_4/CMSSW_7_6_3_patch2/src/MC_list/ROC_eff_scans
+	# Felvett ROC efficiency pontok (18db)
+	{1.000, 0.999, 0.998, 0.997, 0.996, 0.995, 0.992, 0.990, 0.985, 0.980, 0.975, 0.970, 0.960, 0.950, 0.930, 0.900, 0.850, 0.800}
+	# Pontonkénti generált eventek eloszlása
+	config.Data.unitsPerJob = 400
+	NJOBS = 250
+	config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
+	# Példaconfig
+
+
+# Adatbázis generálás recept
+	# Architektúra beállítás 80x-re
+	SCRAM_ARCH=slc6_amd64_gcc493
+	# Teszt
+	echo $SCRAM_ARCH #slc6_amd64_gcc493
+	# CMSSW környezet
+	cmsrel CMSSW_8_0_3_patch1
+	# Környezeti változók beállítása
+	cd CMSSW_8_0_3_patch1/src/ && cmsenv
+	# SiPixel lekérése
+	git-cms-addpkg CondTools/SiPixel
+	# TimingStudy lekérése
+	git clone https://github.com/hunyadix/PixelTimingStudy DPGAnalysis/PixelTimingStudy
+	# Up-to-date fileok bemásolása
+	cp /data/jkarancs/CMSSW/DynIneffDBObject/CMSSW_7_6_3_patch2/src/CondTools/SiPixel/test/SiPixelDynamicInefficiency*.{cc,h} \
+	CondTools/SiPixel/test/
+	cp /data/jkarancs/CMSSW/DynIneffDBObject/CMSSW_7_6_3_patch2/src/SiPixelDynamicInefficiency*.py \
+	CondTools/SiPixel/test/
+	# Recompile packages
+	scram b -j 20
+
+# Dcolscan generálás
+	# Adatbázis létrehozására alkalmas CMSSW_80x könyvtárban
+	mkdir DcolScan
+	cd Dcolscan
+	mkdir dcol{100,99p9,99p6,99p3,99,98,97,95,90,80}
+	cd dcol100
+	# Generálás
+	cp ../../CondTools/SiPixel/test/SiPixelDynamicInefficiencyDB_13TeV_v2_cfg.py .
+	sed -i "s;/afs/cern.ch/user/j/jkarancs/public/DynIneffDBObject/2016/siPixelDynamicInefficiency_13TeV_v2.db;dcol100.db;" SiPixelDynamicInefficiencyDB_13TeV_v2_cfg.py
+	# Hiba esetén 11. sort kikommentelni (process.load('Configuration.Geometry.GeometryExtended2017Reco_cff'))
+		# Hatásfok faktorok beállítása
+		gedit SiPixelDynamicInefficiencyDB_13TeV_v2_cfg.py
+		(...)
+	cmsRun SiPixelDynamicInefficiencyDB_13TeV_v2_cfg.py
+	# Ellenőrzés
+	cp ../../CondTools/SiPixel/test/SiPixelDynamicInefficiencyReader_13TeV_v2_cfg.py .
+	sed -i "s;/afs/cern.ch/user/j/jkarancs/public/DynIneffDBObject/2016/siPixelDynamicInefficiency_13TeV_v2.db;dcol100.db;" SiPixelDynamicInefficiencyReader_13TeV_v2_cfg.py
+	# Hatásfok faktorok beállítása
+		gedit SiPixelDynamicInefficiencyReader_13TeV_v2_cfg.py
+		(...)
+	cmsRun SiPixelDynamicInefficiencyReader_13TeV_v2_cfg.py
+	# Függőségek
+	cp ../../DPGAnalysis/PixelTimingStudy/run_ls_instlumi_pileup_2015.txt .
+	cp ../../DPGAnalysis/PixelTimingStudy/portcardmap.dat .
+	# MC process
+	cp ../../DPGAnalysis/PixelTimingStudy/test/TimingStudy_GenNu_DynIneffDB_cfg.py .
+	sed -i "s;'sqlite_file:siPixelDynamicInefficiency_13TeV_v2.db';'sqlite_file:dcol100.db';" TimingStudy_GenNu_DynIneffDB_cfg.py
+	sed -i "s;useSqlite = False;useSqlite = True;" TimingStudy_GenNu_DynIneffDB_cfg.py
+	sed -i "s;runOnGrid = True;runOnGrid = False;" TimingStudy_GenNu_DynIneffDB_cfg.py
+	sed -i "s;process.maxEvents.input = 100;process.maxEvents.input = 10;" TimingStudy_GenNu_DynIneffDB_cfg.py
+	cmsRun TimingStudy_GenNu_DynIneffDB_cfg.py
+
+# Pledge
+	# Pledge kihírdetése
+	a pledge for user Hunyadi, Ádám (DEBRECEN-IEP) was approved (by Veszpremi, Viktor):
+
+	Project  :  Tracker
+	Activity :  Simulation
+	Task     :  Pixel Dynamic Inefficiency Simulation
+	Year     :  2016
+
+	Work pledged : 1.5 month(s).
+	Work accepted: 1.5 month(s).
+	Work done    : 0.0 month(s).
+
+	# Követési link
+	http://cms.cern.ch/iCMS/admin/pledgetasks?project=TK
+
+
