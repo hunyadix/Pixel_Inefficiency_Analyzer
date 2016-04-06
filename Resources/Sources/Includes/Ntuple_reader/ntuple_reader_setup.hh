@@ -125,8 +125,8 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistos("trajTree", {.fill="Instlumi_vs_Ladders",                    .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
 	histogram_requests -> AddHistos("trajTree", {.fill="Instlumi_vs_Modules",                    .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
 	// Total_Hits : Instlumi
-	// histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_Ladders_vs_Modules", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
-	// histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_ClustROCy_vs_ClustROCx", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
+	histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_Ladders_vs_Modules", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
+	histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_ClustROCy_vs_ClustROCx", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
 
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleAlpha", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0, 0.92, 1.0}});
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleGamma", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0, 0.92, 1.0}});

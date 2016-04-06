@@ -30,6 +30,8 @@ public Post_loop_analyzer_histogram_saver
 {
 	private:
 		// Core
+		template <typename T>
+		bool                                 check_plots(std::vector<T> plot_pointers);
 		double                               find_maximum_of_map(TH2D* map_p);
 		bool                                 is_ROC_real(int layer_number_p, double module_number_p, double ladder_number_p);
 		bool                                 check_coordinate_pair(TH2D* map_p, int layer_number_p, int module_number_p, int ladder_number_p);
@@ -80,6 +82,28 @@ Post_loop_analyzer::~Post_loop_analyzer()
 /*                                                                                                    */
 /******************************************************************************************************/
 /******************************************************************************************************/
+
+template <typename T>
+bool Post_loop_analyzer::check_plots(std::vector<T> plot_pointers)
+{
+	int num_bad_pointers = 0;
+	for(T pointer: plot_pointers)
+	{
+		if(pointer == nullptr)
+		{
+			num_bad_pointers++;
+		}
+	}
+	if(num_bad_pointers == 0)
+	{
+		return true;
+	}
+	else
+	{
+		std::cerr << error_prompt << "Number of missing plots: " << num_bad_pointers << std::endl;
+	}
+	return false;
+}
 
 double Post_loop_analyzer::find_maximum_of_map(TH2D* map_p)
 {
@@ -300,8 +324,9 @@ void Post_loop_analyzer::create_relative_cluster_occupancy_plots()
 		std::cerr << error_prompt << "Cannot create analysis plots before the main histograms get fetched..." << std::cerr;
 		return;
 	}
-	std::function<void(TH2D*, TH2D*, TH2D*)> create_relative_cluster_occupancy = [](TH2D* layer_total_hits_p, TH2D* layer_cluster_occupancy_p, TH2D* layer_relative_cluster_occupancy_p)
+	std::function<void(TH2D*, TH2D*, TH2D*)> create_relative_cluster_occupancy = [this](TH2D* layer_total_hits_p, TH2D* layer_cluster_occupancy_p, TH2D* layer_relative_cluster_occupancy_p)
 	{
+		check_plots(std::vector<TH2D*>({layer_total_hits_p, layer_cluster_occupancy_p, layer_relative_cluster_occupancy_p}));
 		int max_module_bin_number = layer_total_hits_p -> GetXaxis() -> GetNbins();
 		int max_ladder_bin_number = layer_total_hits_p -> GetYaxis() -> GetNbins();
 		// std::cerr << debug_prompt << "Ladder bins: " << max_ladder_bin_number << std::endl;

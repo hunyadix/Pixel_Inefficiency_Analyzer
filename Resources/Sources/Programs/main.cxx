@@ -38,8 +38,12 @@
 #include <algorithm>
 #include <set>
 
-bool debug = false;
-bool debug_prompt_destructors = true;
+bool debug                          = false;
+bool debug_show_smarthisto_outputs  = true;
+bool debug_prompt_inputs            = true;
+bool debug_prompt_file_input_output = false;
+bool debug_prompt_destructors       = true;
+bool debug_prompt_histogram_saving  = true;
 
 /******************************************************************************************************/
 /******************************************************************************************************/
@@ -89,7 +93,7 @@ int main(int argc, char** argv)
 		std::string second_loop_output_name;
 		std::string second_analysis_output_name;
 
-		std::string bad_ROC_file_input_path;            // For reading saved bad ROCs
+		std::string bad_ROC_file_input_path;       // For reading saved bad ROCs
 		std::string analysis_output_parent_folder; // For save the bad ROC list
 		std::string bad_roc_list_save_path;
 
@@ -98,9 +102,9 @@ int main(int argc, char** argv)
 		///////////////////////
 
 		bool tree_loops_requested                      = true;
-		bool analysis_plots_and_calculations_requested = false;
-		bool second_loop_requested                     = false; // Requires analysis_plots..._requested to be true
-		bool second_analysis_requested                 = false;
+		bool analysis_plots_and_calculations_requested = true;
+		bool second_loop_requested                     = true; // Requires analysis_plots..._requested to be true
+		bool second_analysis_requested                 = true;
 
 		/////////////////////
 		// Data file paths //
@@ -110,62 +114,24 @@ int main(int argc, char** argv)
 		// Data for validation //
 		/////////////////////////
 
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol100_process && nohup Dcolscan_processes/dcol100_process > Dcolscan_processes/dcol100.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol80_process && nohup Dcolscan_processes/dcol80_process > Dcolscan_processes/dcol80.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol90_process && nohup Dcolscan_processes/dcol90_process > Dcolscan_processes/dcol90.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol95_process && nohup Dcolscan_processes/dcol95_process > Dcolscan_processes/dcol95.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol97_process && nohup Dcolscan_processes/dcol97_process > Dcolscan_processes/dcol97.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol98_process && nohup Dcolscan_processes/dcol98_process > Dcolscan_processes/dcol98.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol99_process && nohup Dcolscan_processes/dcol99_process > Dcolscan_processes/dcol99.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol99p3_process && nohup Dcolscan_processes/dcol99p3_process > Dcolscan_processes/dcol99p3.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol99p6_process && nohup Dcolscan_processes/dcol99p6_process > Dcolscan_processes/dcol99p6.log 2>&1 &
-		// awesomemake && mv Pixel_Inefficiency_Analyzer Dcolscan_processes/dcol99p9_process && nohup Dcolscan_processes/dcol99p9_process > Dcolscan_processes/dcol99p9.log 2>&1 &
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol100_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol100.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol80_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol80.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol90_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol90.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol95_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol95.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol97_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol97.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol98_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol98.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol99_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol99.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol99p3_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol99p3.root";
-
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol99p6_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol99p6.root";
-
 		// input_file_paths_file_name  = "Data/Dcolscans/dcol99p9_paths.txt";
 		// firts_loop_output_file_name = "Results/Dcolscans/dcol99p9.root";
 
 		// input_file_paths_file_name  = "Data/reweighting_validadtion.txt";
-		// firts_loop_output_file_name = "Results/High_stat_2232b/reweighting_validation_data_results.root";
-		// analysis_output_name        = "Results/High_stat_2232b/reweighting_validation_data_analysis.root";
-		// second_loop_output_name     = "Results/High_stat_2232b/reweighting_validation_data_second_loop_results.root";
-		// second_analysis_output_name = "Results/High_stat_2232b/reweighting_validation_data_for_second_analysis.root";
+		// firts_loop_output_file_name = "Results/High_stat_2232b/reweighting_validation_data_step_1.root";
+		// analysis_output_name        = "Results/High_stat_2232b/reweighting_validation_data_step_2.root";
+		// second_loop_output_name     = "Results/High_stat_2232b/reweighting_validation_data_step_3.root";
+		// second_analysis_output_name = "Results/High_stat_2232b/reweighting_validation_data_step_4.root";
 		
 		////////////////////////////////////////////////
 		// Low statistics check (data for validation) //
 		////////////////////////////////////////////////
 
-		// input_file_paths_file_name  = "Data/low_stat_reweighting_validadtion.txt";
-		// firts_loop_output_file_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_1.root";
-		// analysis_output_name        = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_2.root";
-		// second_loop_output_name     = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_3.root";
-		// second_analysis_output_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_4.root";
+		input_file_paths_file_name  = "Data/low_stat_reweighting_validadtion.txt";
+		firts_loop_output_file_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_1.root";
+		analysis_output_name        = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_2.root";
+		second_loop_output_name     = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_3.root";
+		second_analysis_output_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_4.root";
 		
 		///////////////////////
 		// MC for validation //
@@ -203,7 +169,7 @@ int main(int argc, char** argv)
 		// Extra cut selection //
 		/////////////////////////
 
-		bool set_extracut_2232b = false;
+		bool set_extracut_2232b = true;
 
 		/////////////////////////////
 		// Read bad ROCs from file //
@@ -280,11 +246,22 @@ int main(int argc, char** argv)
 			// Extra cut for buncspacing (2232 bunches) //
 			//////////////////////////////////////////////
 
+			std::unique_ptr<Histogram_generation::Cut> bunchspacing_cut;
+
 			if(set_extracut_2232b)
 			{
 				auto bunchspacing_selection_function = [&ntuple_reader] ()
 				{
-					int run = ntuple_reader -> get_event_field_ptr() -> run;
+					// if(event_field_ptr -> GetBranchStatus("event"))
+					// {
+					// 	std::cerr << error_prompt << "Error reading the event_tree"
+					// }
+					EventData* event_field_ptr = ntuple_reader -> get_event_field_ptr();
+					if(!event_field_ptr)
+					{
+						std::cerr << error_prompt << "Error fetching the event field pointer for the bunchspacing selection!" << std::endl;
+					}
+					int run = event_field_ptr -> run;
 					if((run >= 260099 && run <= 260235) || (run >= 260424 && run <= 260627))
 					{
 						return true; 
@@ -293,8 +270,7 @@ int main(int argc, char** argv)
 				};
 
 				const char* bunchspacing_selection_name = "bunchspacing_selection";
-
-				std::unique_ptr<Histogram_generation::Cut> bunchspacing_cut(new Histogram_generation::Cut);
+				bunchspacing_cut.reset(new Histogram_generation::Cut);
 				bunchspacing_cut -> set_name(bunchspacing_selection_name);
 				bunchspacing_cut -> set_cut_function(bunchspacing_selection_function);
 				histogram_requests -> AddNewCut(bunchspacing_cut);

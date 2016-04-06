@@ -123,6 +123,9 @@ void Post_loop_analyzer_histogram_fetcher::fetch_histograms_from_file(const std:
 	this -> hit_efficiency_impact_beta_correspondence_layer_1   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleBeta/Layer1");
 	this -> hit_efficiency_impact_beta_correspondence_layer_2   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleBeta/Layer2");
 	this -> hit_efficiency_impact_beta_correspondence_layer_3   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleBeta/Layer3");
+	this -> hit_efficiency_impact_gamma_correspondence_layer_1   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleGamma/Layer1");
+	this -> hit_efficiency_impact_gamma_correspondence_layer_2   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleGamma/Layer2");
+	this -> hit_efficiency_impact_gamma_correspondence_layer_3   = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_ImpactAngleGamma/Layer3");
 	this -> hit_efficiency_layer_correspondence                 = this -> get_histogram_by_name<TH1D>(input_file, "HitEfficiency_vs_Layers/HitEfficiency_vs_Layers");
 
 	// ============================== 2D histograms ==============================
@@ -149,9 +152,15 @@ void Post_loop_analyzer_histogram_fetcher::fetch_histograms_from_file(const std:
 	this -> beta_vs_alpha_correlation_layer_1       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleAlpha/Layer1");
 	this -> beta_vs_alpha_correlation_layer_2       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleAlpha/Layer2");
 	this -> beta_vs_alpha_correlation_layer_3       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleAlpha/Layer3");
+	this -> beta_vs_alpha_correlation_layer_1       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleGamma/Layer1");
+	this -> beta_vs_alpha_correlation_layer_2       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleGamma/Layer2");
+	this -> beta_vs_alpha_correlation_layer_3       = this -> get_histogram_by_name<TH2D>(input_file, "ImpactAngleBeta_vs_ImpactAngleGamma/Layer3");
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_1 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleAlpha/Layer1");
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_2 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleAlpha/Layer2");
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_3 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleAlpha/Layer3");
+	this -> hit_efficiency_vs_beta_vs_gamma_layer_1 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleGamma/Layer1");
+	this -> hit_efficiency_vs_beta_vs_gamma_layer_2 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleGamma/Layer2");
+	this -> hit_efficiency_vs_beta_vs_gamma_layer_3 = this -> get_histogram_by_name<TH2D>(input_file, "HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleGamma/Layer3");
 
 	input_file -> Close();
 	delete input_file;

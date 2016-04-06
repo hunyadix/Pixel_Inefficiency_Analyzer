@@ -123,6 +123,9 @@ struct Post_loop_analyzer_data_structure
 		TH1D* hit_efficiency_impact_beta_correspondence_layer_1;
 		TH1D* hit_efficiency_impact_beta_correspondence_layer_2;
 		TH1D* hit_efficiency_impact_beta_correspondence_layer_3;
+		TH1D* hit_efficiency_impact_gamma_correspondence_layer_1;
+		TH1D* hit_efficiency_impact_gamma_correspondence_layer_2;
+		TH1D* hit_efficiency_impact_gamma_correspondence_layer_3;
 
 		/******************************************************************************************************/
 		/******************************************************************************************************/
@@ -168,17 +171,29 @@ struct Post_loop_analyzer_data_structure
 		TH2D* beta_vs_alpha_correlation_layer_1;
 		TH2D* beta_vs_alpha_correlation_layer_2;
 		TH2D* beta_vs_alpha_correlation_layer_3;
+		TH2D* beta_vs_gamma_correlation_layer_1;
+		TH2D* beta_vs_gamma_correlation_layer_2;
+		TH2D* beta_vs_gamma_correlation_layer_3;
 
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_1;
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_2;
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_3;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_1;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_2;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_3;
 
 		TH2D* beta_vs_alpha_correlation_layer_1_rebinned = NULL;
 		TH2D* beta_vs_alpha_correlation_layer_2_rebinned = NULL;
 		TH2D* beta_vs_alpha_correlation_layer_3_rebinned = NULL;
+		TH2D* beta_vs_gamma_correlation_layer_1_rebinned = NULL;
+		TH2D* beta_vs_gamma_correlation_layer_2_rebinned = NULL;
+		TH2D* beta_vs_gamma_correlation_layer_3_rebinned = NULL;
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned = NULL;
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned = NULL;
 		TH2D* hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned = NULL;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned = NULL;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned = NULL;
+		TH2D* hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned = NULL;
 
 		/******************************************************************************************************/
 		/******************************************************************************************************/
