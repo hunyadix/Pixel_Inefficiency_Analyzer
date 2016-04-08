@@ -21,7 +21,7 @@ class TrajMeasData
 		float res_dx;
 		float res_dz;
 		float lev;
-		int clust_near; // akkor is valid egy hit, ha értéke 1
+		int clust_near;
 		int hit_near;
 		int pass_effcuts;
 		// Paired branch (keep order)

@@ -13,7 +13,6 @@ extern bool debug;
 
 namespace Histogram_generation
 {
-
 	class Cut_d0 : public Cut
 	{
 		public:

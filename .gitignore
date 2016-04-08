@@ -21,6 +21,7 @@ Data/*
 Results/*
 
 # Logs
+nohup.out
 *.log
 
 # References
@@ -35,5 +36,5 @@ Jegyzet.md
 *.sublime-*
 
 # Instlumi and pileup maps
-Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2012.txt
-Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2015.txt
+# Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2012.txt
+# Resources/Sources/Includes/Histogram_generation/Fill_parameters/Instlumi_map/run_ls_instlumi_pileup_2015.txt

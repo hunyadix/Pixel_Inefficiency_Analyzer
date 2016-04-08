@@ -114,4 +114,10 @@ Validálni event.nvertex alapján
 	# Követési link
 	http://cms.cern.ch/iCMS/admin/pledgetasks?project=TK
 
+# Klasztertávolság modulfüggés
 
+	A modu
+
+	Mekkora lenne a hit efficiency, ha a klaszterhozzárendelés távolsága más érték lenne
+	
+	# Szükséges plotok

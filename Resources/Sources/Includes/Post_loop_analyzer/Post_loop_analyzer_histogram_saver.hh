@@ -23,6 +23,9 @@ class Post_loop_analyzer_histogram_saver :
 virtual protected Post_loop_analyzer_data_structure
 {
 	protected:
+
+template <typename T>
+		void check_set_name_title(T plot_ptr, const std::string& name, const std::string& title);
 		// Drawing helpers
 		void set_canvas_style_basic(TCanvas* canvas_p);
 		void set_graphics_and_draw(TVirtualPad* pad_p, TH2D* histogram_p);
@@ -83,6 +86,16 @@ Post_loop_analyzer_histogram_saver::~Post_loop_analyzer_histogram_saver()
 /*                                                                                                    */
 /******************************************************************************************************/
 /******************************************************************************************************/
+
+template <typename T>
+void Post_loop_analyzer_histogram_saver::check_set_name_title(T plot_ptr, const std::string& name, const std::string& title)
+{
+	if(plot_ptr == nullptr)
+	{
+		std::cerr << error_prompt << "Setting name of \"" << name << "\" cannot be done without initializating the histogram first." << std::endl;
+	}
+	plot_ptr -> SetNameTitle(name.c_str(), title.c_str());
+}
 
 void Post_loop_analyzer_histogram_saver::set_canvas_style_basic(TCanvas* canvas_p)
 {
@@ -416,15 +429,15 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 	{
 		std::cerr << debug_prompt << "Saving: step 1." << std::endl;
 	}
-	this -> hit_efficiency_on_modules_map_layer_1             -> SetNameTitle("hit_efficiency_on_modules_layer_1", "Hit efficiency on modules layer 1");
-	this -> total_hits_on_modules_map_layer_1                 -> SetNameTitle("total_hits_on_modules_layer_1", "Total hits on modules layer 1");
-	this -> clusters_on_modules_map_layer_1                   -> SetNameTitle("clusters_on_modules_layer_1", "Clusters on modules layer 1");
-	this -> hit_efficiency_on_modules_map_layer_2             -> SetNameTitle("hit_efficiency_on_modules_layer_2", "Hit efficiency on modules layer 2");
-	this -> total_hits_on_modules_map_layer_2                 -> SetNameTitle("total_hits_on_modules_layer_2", "Total hits on modules layer 2");
-	this -> clusters_on_modules_map_layer_2                   -> SetNameTitle("clusters_on_modules_layer_2", "Clusters on modules layer 2");
-	this -> hit_efficiency_on_modules_map_layer_3             -> SetNameTitle("hit_efficiency_on_modules_layer_3", "Hit efficiency on modules layer 3");
-	this -> total_hits_on_modules_map_layer_3                 -> SetNameTitle("total_hits_on_modules_layer_3", "Total hits on modules layer 3");
-	this -> clusters_on_modules_map_layer_3                   -> SetNameTitle("clusters_on_modules_layer_3", "Clusters on modules layer 3");
+	this -> check_set_name_title(hit_efficiency_on_modules_map_layer_1, "hit_efficiency_on_modules_layer_1", "Hit efficiency on modules layer 1");
+	this -> check_set_name_title(total_hits_on_modules_map_layer_1, "total_hits_on_modules_layer_1", "Total hits on modules layer 1");
+	this -> check_set_name_title(clusters_on_modules_map_layer_1, "clusters_on_modules_layer_1", "Clusters on modules layer 1");
+	this -> check_set_name_title(hit_efficiency_on_modules_map_layer_2, "hit_efficiency_on_modules_layer_2", "Hit efficiency on modules layer 2");
+	this -> check_set_name_title(total_hits_on_modules_map_layer_2, "total_hits_on_modules_layer_2", "Total hits on modules layer 2");
+	this -> check_set_name_title(clusters_on_modules_map_layer_2, "clusters_on_modules_layer_2", "Clusters on modules layer 2");
+	this -> check_set_name_title(hit_efficiency_on_modules_map_layer_3, "hit_efficiency_on_modules_layer_3", "Hit efficiency on modules layer 3");
+	this -> check_set_name_title(total_hits_on_modules_map_layer_3, "total_hits_on_modules_layer_3", "Total hits on modules layer 3");
+	this -> check_set_name_title(clusters_on_modules_map_layer_3, "clusters_on_modules_layer_3", "Clusters on modules layer 3");
 	this -> hit_efficiency_on_modules_map_layer_1             -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
 	this -> total_hits_on_modules_map_layer_1                 -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
 	this -> clusters_on_modules_map_layer_1                   -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
@@ -432,15 +445,15 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 	this -> total_hits_on_modules_map_layer_2                 -> GetYaxis() -> SetRangeUser(-16.5, 16.5);
 	this -> clusters_on_modules_map_layer_2                   -> GetYaxis() -> SetRangeUser(-16.5, 16.5);
 	
-	this -> hit_efficiency_on_ROCs_map_layer_1             -> SetNameTitle("hit_efficiency_on_ROCs_layer_1", "Hit efficiency on ROCs layer 1");
-	this -> total_hits_on_ROCs_map_layer_1                 -> SetNameTitle("total_hits_on_ROCs_layer_1", "Total hits on ROCs layer 1");
-	this -> clusters_on_ROCs_map_layer_1                   -> SetNameTitle("clusters_on_ROCs_layer_1", "Clusters on ROCs layer 1");
-	this -> hit_efficiency_on_ROCs_map_layer_2             -> SetNameTitle("hit_efficiency_on_ROCs_layer_2", "Hit efficiency on ROCs layer 2");
-	this -> total_hits_on_ROCs_map_layer_2                 -> SetNameTitle("total_hits_on_ROCs_layer_2", "Total hits on ROCs layer 2");
-	this -> clusters_on_ROCs_map_layer_2                   -> SetNameTitle("clusters_on_ROCs_layer_2", "Clusters on ROCs layer 2");
-	this -> hit_efficiency_on_ROCs_map_layer_3             -> SetNameTitle("hit_efficiency_on_ROCs_layer_3", "Hit efficiency on ROCs layer 3");
-	this -> total_hits_on_ROCs_map_layer_3                 -> SetNameTitle("total_hits_on_ROCs_layer_3", "Total hits on ROCs layer 3");
-	this -> clusters_on_ROCs_map_layer_3                   -> SetNameTitle("clusters_on_ROCs_layer_3", "Clusters on ROCs layer 3");
+	this -> check_set_name_title(hit_efficiency_on_ROCs_map_layer_1, "hit_efficiency_on_ROCs_layer_1", "Hit efficiency on ROCs layer 1");
+	this -> check_set_name_title(total_hits_on_ROCs_map_layer_1, "total_hits_on_ROCs_layer_1", "Total hits on ROCs layer 1");
+	this -> check_set_name_title(clusters_on_ROCs_map_layer_1, "clusters_on_ROCs_layer_1", "Clusters on ROCs layer 1");
+	this -> check_set_name_title(hit_efficiency_on_ROCs_map_layer_2, "hit_efficiency_on_ROCs_layer_2", "Hit efficiency on ROCs layer 2");
+	this -> check_set_name_title(total_hits_on_ROCs_map_layer_2, "total_hits_on_ROCs_layer_2", "Total hits on ROCs layer 2");
+	this -> check_set_name_title(clusters_on_ROCs_map_layer_2, "clusters_on_ROCs_layer_2", "Clusters on ROCs layer 2");
+	this -> check_set_name_title(hit_efficiency_on_ROCs_map_layer_3, "hit_efficiency_on_ROCs_layer_3", "Hit efficiency on ROCs layer 3");
+	this -> check_set_name_title(total_hits_on_ROCs_map_layer_3, "total_hits_on_ROCs_layer_3", "Total hits on ROCs layer 3");
+	this -> check_set_name_title(clusters_on_ROCs_map_layer_3, "clusters_on_ROCs_layer_3", "Clusters on ROCs layer 3");
 	this -> hit_efficiency_on_ROCs_map_layer_1             -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
 	this -> total_hits_on_ROCs_map_layer_1                 -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
 	this -> clusters_on_ROCs_map_layer_1                   -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
@@ -458,9 +471,9 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 		std::cerr << debug_prompt << "Saving: step 2." << std::endl;
 	}
 
-	this -> hit_efficiency_instlumi_correspondence_layer_1      -> SetNameTitle("hit_efficiency_instlumi_correspondence_layer_1",      "Hit efficiency vs Instlumi on layer 1;Instlumi;Eff");
-	this -> hit_efficiency_instlumi_correspondence_layer_2      -> SetNameTitle("hit_efficiency_instlumi_correspondence_layer_2",      "Hit efficiency vs Instlumi on layer 2;Instlumi;Eff");
-	this -> hit_efficiency_instlumi_correspondence_layer_3      -> SetNameTitle("hit_efficiency_instlumi_correspondence_layer_3",      "Hit efficiency vs Instlumi on layer 3;Instlumi;Eff");
+	this -> check_set_name_title(hit_efficiency_instlumi_correspondence_layer_1, "hit_efficiency_instlumi_correspondence_layer_1",      "Hit efficiency vs Instlumi on layer 1;Instlumi;Eff");
+	this -> check_set_name_title(hit_efficiency_instlumi_correspondence_layer_2, "hit_efficiency_instlumi_correspondence_layer_2",      "Hit efficiency vs Instlumi on layer 2;Instlumi;Eff");
+	this -> check_set_name_title(hit_efficiency_instlumi_correspondence_layer_3, "hit_efficiency_instlumi_correspondence_layer_3",      "Hit efficiency vs Instlumi on layer 3;Instlumi;Eff");
 
 	//////////////////////////
 	// Impact angle analyis //
@@ -471,15 +484,15 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 		std::cerr << debug_prompt << "Saving: step 3. 1/2" << std::endl;
 	}
 
-	this -> hit_efficiency_impact_alpha_correspondence_layer_1 -> SetNameTitle("hit_efficiency_impact_alpha_correspondence_layer_1", "Hit efficiency vs alpha on layer 1;alpha;Eff");
-	this -> hit_efficiency_impact_alpha_correspondence_layer_2 -> SetNameTitle("hit_efficiency_impact_alpha_correspondence_layer_2", "Hit efficiency vs alpha on layer 2;alpha;Eff");
-	this -> hit_efficiency_impact_alpha_correspondence_layer_3 -> SetNameTitle("hit_efficiency_impact_alpha_correspondence_layer_3", "Hit efficiency vs alpha on layer 3;alpha;Eff");
-	// this -> hit_efficiency_impact_gamma_correspondence_layer_1 -> SetNameTitle("hit_efficiency_impact_gamma_correspondence_layer_1", "Hit efficiency vs gamma on layer 1;gamma;Eff");
-	// this -> hit_efficiency_impact_gamma_correspondence_layer_2 -> SetNameTitle("hit_efficiency_impact_gamma_correspondence_layer_2", "Hit efficiency vs gamma on layer 2;gamma;Eff");
-	// this -> hit_efficiency_impact_gamma_correspondence_layer_3 -> SetNameTitle("hit_efficiency_impact_gamma_correspondence_layer_3", "Hit efficiency vs gamma on layer 3;gamma;Eff");
-	this -> hit_efficiency_impact_beta_correspondence_layer_1  -> SetNameTitle("hit_efficiency_impact_beta_correspondence_layer_1", "Hit efficiency vs beta on layer 1;beta;Eff");
-	this -> hit_efficiency_impact_beta_correspondence_layer_2  -> SetNameTitle("hit_efficiency_impact_beta_correspondence_layer_2", "Hit efficiency vs beta on layer 2;beta;Eff");
-	this -> hit_efficiency_impact_beta_correspondence_layer_3  -> SetNameTitle("hit_efficiency_impact_beta_correspondence_layer_3", "Hit efficiency vs beta on layer 3;beta;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_alpha_correspondence_layer_1, "hit_efficiency_impact_alpha_correspondence_layer_1", "Hit efficiency vs alpha on layer 1;alpha;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_alpha_correspondence_layer_2, "hit_efficiency_impact_alpha_correspondence_layer_2", "Hit efficiency vs alpha on layer 2;alpha;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_alpha_correspondence_layer_3, "hit_efficiency_impact_alpha_correspondence_layer_3", "Hit efficiency vs alpha on layer 3;alpha;Eff");
+	// this -> check_set_name_title(hit_efficiency_impact_gamma_correspondence_layer_1, "hit_efficiency_impact_gamma_correspondence_layer_1", "Hit efficiency vs gamma on layer 1;gamma;Eff");
+	// this -> check_set_name_title(hit_efficiency_impact_gamma_correspondence_layer_2, "hit_efficiency_impact_gamma_correspondence_layer_2", "Hit efficiency vs gamma on layer 2;gamma;Eff");
+	// this -> check_set_name_title(hit_efficiency_impact_gamma_correspondence_layer_3, "hit_efficiency_impact_gamma_correspondence_layer_3", "Hit efficiency vs gamma on layer 3;gamma;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_beta_correspondence_layer_1, "hit_efficiency_impact_beta_correspondence_layer_1", "Hit efficiency vs beta on layer 1;beta;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_beta_correspondence_layer_2, "hit_efficiency_impact_beta_correspondence_layer_2", "Hit efficiency vs beta on layer 2;beta;Eff");
+	this -> check_set_name_title(hit_efficiency_impact_beta_correspondence_layer_3, "hit_efficiency_impact_beta_correspondence_layer_3", "Hit efficiency vs beta on layer 3;beta;Eff");
 
 	hit_efficiency_impact_alpha_correspondence_layer_1 -> GetXaxis() -> SetRangeUser(70.0, 110.0);
 	hit_efficiency_impact_alpha_correspondence_layer_1 -> GetYaxis() -> SetRangeUser(0.93, 1.00);
@@ -494,19 +507,19 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 	hit_efficiency_impact_beta_correspondence_layer_3  -> GetXaxis() -> SetRangeUser(5.0,  175.0);
 	hit_efficiency_impact_beta_correspondence_layer_3  -> GetYaxis() -> SetRangeUser(0.93, 1.00);
 
-	this -> beta_vs_alpha_correlation_layer_1 -> SetNameTitle("beta_vs_alpha_correspondence_layer_1", "Beta vs alpha on layer 1;alpha;beta");
-	this -> beta_vs_alpha_correlation_layer_2 -> SetNameTitle("beta_vs_alpha_correspondence_layer_2", "Beta vs alpha on layer 2;alpha;beta");
-	this -> beta_vs_alpha_correlation_layer_3 -> SetNameTitle("beta_vs_alpha_correspondence_layer_3", "Beta vs alpha on layer 3;alpha;beta");
-	// this -> beta_vs_gamma_correlation_layer_1 -> SetNameTitle("beta_vs_gamma_correspondence_layer_1", "Beta vs gamma on layer 1;gamma;beta");
-	// this -> beta_vs_gamma_correlation_layer_2 -> SetNameTitle("beta_vs_gamma_correspondence_layer_2", "Beta vs gamma on layer 2;gamma;beta");
-	// this -> beta_vs_gamma_correlation_layer_3 -> SetNameTitle("beta_vs_gamma_correspondence_layer_3", "Beta vs gamma on layer 3;gamma;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_1, "beta_vs_alpha_correspondence_layer_1", "Beta vs alpha on layer 1;alpha;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_2, "beta_vs_alpha_correspondence_layer_2", "Beta vs alpha on layer 2;alpha;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_3, "beta_vs_alpha_correspondence_layer_3", "Beta vs alpha on layer 3;alpha;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_1, "beta_vs_gamma_correspondence_layer_1", "Beta vs gamma on layer 1;gamma;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_2, "beta_vs_gamma_correspondence_layer_2", "Beta vs gamma on layer 2;gamma;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_3, "beta_vs_gamma_correspondence_layer_3", "Beta vs gamma on layer 3;gamma;beta");
 
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_1 -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_1", "Hit efficiency vs beta vs alpha on layer 1;alpha;beta");
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_2 -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_2", "Hit efficiency vs beta vs alpha on layer 2;alpha;beta");
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_3 -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_3", "Hit efficiency vs beta vs alpha on layer 3;alpha;beta");
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_1 -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_1", "Hit efficiency vs beta vs gamma on layer 1;gamma;beta");
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_2 -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_2", "Hit efficiency vs beta vs gamma on layer 2;gamma;beta");
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_3 -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_3", "Hit efficiency vs beta vs gamma on layer 3;gamma;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_1, "hit_efficiency_vs_beta_vs_alpha_layer_1", "Hit efficiency vs beta vs alpha on layer 1;alpha;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_2, "hit_efficiency_vs_beta_vs_alpha_layer_2", "Hit efficiency vs beta vs alpha on layer 2;alpha;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_3, "hit_efficiency_vs_beta_vs_alpha_layer_3", "Hit efficiency vs beta vs alpha on layer 3;alpha;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_1, "hit_efficiency_vs_beta_vs_gamma_layer_1", "Hit efficiency vs beta vs gamma on layer 1;gamma;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_2, "hit_efficiency_vs_beta_vs_gamma_layer_2", "Hit efficiency vs beta vs gamma on layer 2;gamma;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_3, "hit_efficiency_vs_beta_vs_gamma_layer_3", "Hit efficiency vs beta vs gamma on layer 3;gamma;beta");
 
 	this -> beta_vs_alpha_correlation_layer_1_rebinned       = new TH2D(*(this -> beta_vs_alpha_correlation_layer_1));
 	this -> beta_vs_alpha_correlation_layer_2_rebinned       = new TH2D(*(this -> beta_vs_alpha_correlation_layer_2));
@@ -526,28 +539,28 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 		std::cerr << debug_prompt << "Saving: step 3. 2/2" << std::endl;
 	}
 
-	this -> beta_vs_alpha_correlation_layer_1_rebinned       -> SetNameTitle("beta_vs_alpha_correspondence_layer_1_rebinned", "Beta vs alpha on layer 1 rebinned;alpha;beta");
-	this -> beta_vs_alpha_correlation_layer_2_rebinned       -> SetNameTitle("beta_vs_alpha_correspondence_layer_2_rebinned", "Beta vs alpha on layer 2 rebinned;alpha;beta");
-	this -> beta_vs_alpha_correlation_layer_3_rebinned       -> SetNameTitle("beta_vs_alpha_correspondence_layer_3_rebinned", "Beta vs alpha on layer 3 rebinned;alpha;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_1_rebinned, "beta_vs_alpha_correspondence_layer_1_rebinned", "Beta vs alpha on layer 1 rebinned;alpha;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_2_rebinned, "beta_vs_alpha_correspondence_layer_2_rebinned", "Beta vs alpha on layer 2 rebinned;alpha;beta");
+	this -> check_set_name_title(beta_vs_alpha_correlation_layer_3_rebinned, "beta_vs_alpha_correspondence_layer_3_rebinned", "Beta vs alpha on layer 3 rebinned;alpha;beta");
 	this -> beta_vs_alpha_correlation_layer_1_rebinned       -> Rebin2D(5, 5);
 	this -> beta_vs_alpha_correlation_layer_2_rebinned       -> Rebin2D(5, 5);
 	this -> beta_vs_alpha_correlation_layer_3_rebinned       -> Rebin2D(5, 5);
-	// this -> beta_vs_gamma_correlation_layer_1_rebinned       -> SetNameTitle("beta_vs_gamma_correspondence_layer_1_rebinned", "Beta vs gamma on layer 1 rebinned;gamma;beta");
-	// this -> beta_vs_gamma_correlation_layer_2_rebinned       -> SetNameTitle("beta_vs_gamma_correspondence_layer_2_rebinned", "Beta vs gamma on layer 2 rebinned;gamma;beta");
-	// this -> beta_vs_gamma_correlation_layer_3_rebinned       -> SetNameTitle("beta_vs_gamma_correspondence_layer_3_rebinned", "Beta vs gamma on layer 3 rebinned;gamma;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_1_rebinned, "beta_vs_gamma_correspondence_layer_1_rebinned", "Beta vs gamma on layer 1 rebinned;gamma;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_2_rebinned, "beta_vs_gamma_correspondence_layer_2_rebinned", "Beta vs gamma on layer 2 rebinned;gamma;beta");
+	// this -> check_set_name_title(beta_vs_gamma_correlation_layer_3_rebinned, "beta_vs_gamma_correspondence_layer_3_rebinned", "Beta vs gamma on layer 3 rebinned;gamma;beta");
 	// this -> beta_vs_gamma_correlation_layer_1_rebinned       -> Rebin2D(5, 5);
 	// this -> beta_vs_gamma_correlation_layer_2_rebinned       -> Rebin2D(5, 5);
 	// this -> beta_vs_gamma_correlation_layer_3_rebinned       -> Rebin2D(5, 5);
 
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned", "Beta vs alpha on layer 1 rebinned;alpha;beta");
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned", "Beta vs alpha on layer 2 rebinned;alpha;beta");
-	this -> hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned", "Beta vs alpha on layer 3 rebinned;alpha;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned, "hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned", "Beta vs alpha on layer 1 rebinned;alpha;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned, "hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned", "Beta vs alpha on layer 2 rebinned;alpha;beta");
+	this -> check_set_name_title(hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned, "hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned", "Beta vs alpha on layer 3 rebinned;alpha;beta");
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_1_rebinned -> Rebin2D(5, 5);
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_2_rebinned -> Rebin2D(5, 5);
 	this -> hit_efficiency_vs_beta_vs_alpha_layer_3_rebinned -> Rebin2D(5, 5);
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned", "Beta vs gamma on layer 1 rebinned;gamma;beta");
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned", "Beta vs gamma on layer 2 rebinned;gamma;beta");
-	// this -> hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned -> SetNameTitle("hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned", "Beta vs gamma on layer 3 rebinned;gamma;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned, "hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned", "Beta vs gamma on layer 1 rebinned;gamma;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned, "hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned", "Beta vs gamma on layer 2 rebinned;gamma;beta");
+	// this -> check_set_name_title(hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned, "hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned", "Beta vs gamma on layer 3 rebinned;gamma;beta");
 	// this -> hit_efficiency_vs_beta_vs_gamma_layer_1_rebinned -> Rebin2D(5, 5);
 	// this -> hit_efficiency_vs_beta_vs_gamma_layer_2_rebinned -> Rebin2D(5, 5);
 	// this -> hit_efficiency_vs_beta_vs_gamma_layer_3_rebinned -> Rebin2D(5, 5);

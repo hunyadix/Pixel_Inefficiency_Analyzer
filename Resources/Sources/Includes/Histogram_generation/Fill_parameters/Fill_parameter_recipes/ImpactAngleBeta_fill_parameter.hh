@@ -15,7 +15,7 @@ extern bool debug;
 class ImpactAngleBeta_fill_parameter : public Fill_parameter
 {
 	private:
-		double deg;
+		float deg;
 	public:
 		ImpactAngleBeta_fill_parameter(Ntuple_reader*& ntuple_reader_p);
 		~ImpactAngleBeta_fill_parameter()
@@ -30,13 +30,13 @@ class ImpactAngleBeta_fill_parameter : public Fill_parameter
 ImpactAngleBeta_fill_parameter::ImpactAngleBeta_fill_parameter(Ntuple_reader*& ntuple_reader_p)
 {
 	this -> name = "ImpactAngleBeta";
-	this -> nbin = 100; 
-	this -> bins = { 0.0, 360.0 };
+	this -> nbin = 30; 
+	this -> bins = { 0.0, 90.0 };
 	this -> deg  = 180 / 3.141516925;
 	this -> fill = [&ntuple_reader_p, this]()
 	{
 		// std::cerr << debug_prompt << "Beta is " << std::abs(ntuple_reader_p -> get_traj_field_ptr() -> beta) << std::endl;
-		return std::abs(ntuple_reader_p -> get_traj_field_ptr() -> beta * this -> deg); 
+		return std::abs(90 - std::abs(ntuple_reader_p -> get_traj_field_ptr() -> beta * this -> deg)); 
 	};
 	this -> axis_title = "beta (impact angle)"; 
 }

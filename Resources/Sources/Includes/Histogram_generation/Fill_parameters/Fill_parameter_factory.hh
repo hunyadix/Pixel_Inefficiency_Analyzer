@@ -18,6 +18,9 @@
 #include "Fill_parameter_recipes/ImpactAngleAlpha_fill_parameter.hh"
 #include "Fill_parameter_recipes/ImpactAngleBeta_fill_parameter.hh"
 #include "Fill_parameter_recipes/ImpactAngleGamma_fill_parameter.hh"
+#include "Fill_parameter_recipes/DXCL_fill_parameter.hh"
+#include "Fill_parameter_recipes/DYCL_fill_parameter.hh"
+#include "Fill_parameter_recipes/DRCL_fill_parameter.hh"
 
 class Fill_parameter_factory
 {
@@ -110,6 +113,21 @@ std::unique_ptr<Fill_parameter>& Fill_parameter_factory::get_fill_parameter(cons
 	if(type_p == "ImpactAngleGamma")
 	{
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new ImpactAngleGamma_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "DXCL")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new DXCL_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "DYCL")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new DYCL_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "DRCL")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new DRCL_fill_parameter(ntuple_reader_p)));
 		return fill_parameter_list.back();
 	}
 	std::cerr << error_prompt << "Failed to generate postfix: " << type_p << ". (Invalid keyword?)" << std::endl;

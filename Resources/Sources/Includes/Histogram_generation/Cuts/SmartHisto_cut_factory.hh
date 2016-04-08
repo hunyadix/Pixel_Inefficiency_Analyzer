@@ -21,6 +21,7 @@
 #include "Cut_recipes/Cut_nvtx.hh"
 #include "Cut_recipes/Cut_pt.hh"
 #include "Cut_recipes/Cut_valmis.hh"
+#include "Cut_recipes/Cut_bpix.hh"
 
 extern bool debug;
 
@@ -58,6 +59,7 @@ namespace Histogram_generation
 			static std::unique_ptr<Cut, Silent_deleter> cut_pixhit;
 			static std::unique_ptr<Cut, Silent_deleter> cut_pt;
 			static std::unique_ptr<Cut, Silent_deleter> cut_valmis;
+			static std::unique_ptr<Cut, Silent_deleter> cut_bpix;
 
 		public:
 			static std::unique_ptr<Cut>& get_cut(const std::string& type_p, Ntuple_reader*& ntuple_reader_p);
@@ -82,6 +84,7 @@ namespace Histogram_generation
 		if(!cut_zerobias) {cut_zerobias.reset( new Cut_zerobias( ntuple_reader_p));}
 		if(!cut_pt)       {cut_pt.reset(       new Cut_pt(       ntuple_reader_p));}
 		if(!cut_valmis)   {cut_valmis.reset(   new Cut_valmis(   ntuple_reader_p));}
+		if(!cut_bpix)   {cut_bpix.reset(     new Cut_bpix(     ntuple_reader_p));}
 
 		if(type_p == "zerobias")
 		{
@@ -106,6 +109,19 @@ namespace Histogram_generation
 			});
 			nvtx_base_cut -> set_name("nvtx");
 			cut_list.push_back(std::unique_ptr<Cut>(nvtx_base_cut));
+			return cut_list.back();
+		}
+
+		if(type_p == "bpix")
+		{
+			Cut* bpix_base_cut = new Cut;
+			bpix_base_cut -> set_cut_function([] ()
+			{
+				if(!((*cut_bpix)()))     { return false; }
+				return true;
+			});
+			bpix_base_cut -> set_name("bpix");
+			cut_list.push_back(std::unique_ptr<Cut>(bpix_base_cut));
 			return cut_list.back();
 		}
 
@@ -168,6 +184,7 @@ namespace Histogram_generation
 	std::unique_ptr<Cut, Cut_factory::Silent_deleter> Cut_factory::cut_pixhit(nullptr);
 	std::unique_ptr<Cut, Cut_factory::Silent_deleter> Cut_factory::cut_pt(nullptr);
 	std::unique_ptr<Cut, Cut_factory::Silent_deleter> Cut_factory::cut_valmis(nullptr);
+	std::unique_ptr<Cut, Cut_factory::Silent_deleter> Cut_factory::cut_bpix(nullptr);
 
 } // Histogram_generation
 

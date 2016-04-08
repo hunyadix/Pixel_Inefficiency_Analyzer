@@ -38,12 +38,14 @@
 #include <algorithm>
 #include <set>
 
-bool debug                          = false;
-bool debug_show_smarthisto_outputs  = true;
-bool debug_prompt_inputs            = true;
-bool debug_prompt_file_input_output = false;
-bool debug_prompt_destructors       = true;
-bool debug_prompt_histogram_saving  = true;
+bool debug                            = false;
+bool debug_show_smarthisto_outputs    = true;
+bool debug_prompt_inputs              = true;
+bool debug_prompt_file_input_output   = false;
+bool debug_prompt_destructors         = true;
+bool debug_prompt_histogram_saving    = true;
+bool debug_customsmarthisto_inserting = false;
+bool debug_customsmarthisto_updating  = false;
 
 /******************************************************************************************************/
 /******************************************************************************************************/
@@ -103,8 +105,8 @@ int main(int argc, char** argv)
 
 		bool tree_loops_requested                      = true;
 		bool analysis_plots_and_calculations_requested = true;
-		bool second_loop_requested                     = true; // Requires analysis_plots..._requested to be true
-		bool second_analysis_requested                 = true;
+		bool second_loop_requested                     = false;
+		bool second_analysis_requested                 = false;
 
 		/////////////////////
 		// Data file paths //
@@ -127,11 +129,11 @@ int main(int argc, char** argv)
 		// Low statistics check (data for validation) //
 		////////////////////////////////////////////////
 
-		input_file_paths_file_name  = "Data/low_stat_reweighting_validadtion.txt";
-		firts_loop_output_file_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_1.root";
-		analysis_output_name        = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_2.root";
-		second_loop_output_name     = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_3.root";
-		second_analysis_output_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_4.root";
+		// input_file_paths_file_name  = "Data/low_stat_reweighting_validadtion.txt";
+		// firts_loop_output_file_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_1.root";
+		// analysis_output_name        = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_2.root";
+		// second_loop_output_name     = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_3.root";
+		// second_analysis_output_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_4.root";
 		
 		///////////////////////
 		// MC for validation //
@@ -144,12 +146,22 @@ int main(int argc, char** argv)
 		// General purpose check (data and mc) //
 		/////////////////////////////////////////
 
-		// input_file_paths_file_name  = "Data/debug_list.txt";
+		input_file_paths_file_name  = "Data/debug_list.txt";
 		// input_file_paths_file_name  = "Data/PIA_debug.txt";
-		// firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
-		// analysis_output_name        = "Results/Debug/debug_data_step_2.root";
-		// second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
-		// second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+		firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
+		analysis_output_name        = "Results/Debug/debug_data_step_2.root";
+		second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
+		second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+
+		///////////////////////////////
+		// 2012 general purpose data //
+		///////////////////////////////
+
+		// input_file_paths_file_name  = "Data/2012_data.txt";
+		// firts_loop_output_file_name = "Results/2012/general_step_1.root";
+		// analysis_output_name        = "Results/2012/general_step_2.root";
+		// second_loop_output_name     = "Results/2012/general_step_3.root";
+		// second_analysis_output_name = "Results/2012/general_step_4.root";
 
 		////////////////////////////////////////////////////
 		// Data or simulation (for instlumi calculation)  //
@@ -169,7 +181,7 @@ int main(int argc, char** argv)
 		// Extra cut selection //
 		/////////////////////////
 
-		bool set_extracut_2232b = true;
+		bool set_extracut_2232b = false;
 
 		/////////////////////////////
 		// Read bad ROCs from file //
@@ -185,14 +197,15 @@ int main(int argc, char** argv)
 		if(analysis_output_name.size())
 		{
 			analysis_output_parent_folder = analysis_output_name.substr(0, analysis_output_name.find_last_of("/\\"));
-			bad_roc_list_save_path = analysis_output_parent_folder + "bad_ROC_list.txt";
+			bad_roc_list_save_path = analysis_output_parent_folder + "/bad_ROC_list.txt";
 		}
 
 		//////////////
 		// Schedule //
 		//////////////
 
-		int schedule = Ntuple_reader::Loop_request_flags::event_tree_loop_request |
+		int schedule = 
+		               Ntuple_reader::Loop_request_flags::event_tree_loop_request |
 		               // Ntuple_reader::Loop_request_flags::lumi_tree_loop_request  |
 		               // Ntuple_reader::Loop_request_flags::run_tree_loop_request   |
 		               Ntuple_reader::Loop_request_flags::clust_tree_loop_request |

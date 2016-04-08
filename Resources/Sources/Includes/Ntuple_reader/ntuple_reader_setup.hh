@@ -22,6 +22,8 @@ struct Ntuple_reader_setup_options
 	bool                                   is_mc;
 };
 
+int ntuple_reader_setup(Ntuple_reader_setup_options setup_options);
+
 int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 {
 	using Histogram_generation::Cut_factory;
@@ -40,11 +42,18 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistoType("runTree");
 	histogram_requests -> AddHistoType("clustTree");
 	histogram_requests -> AddHistoType("trajTree");
+
 	
+	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Validhit", ntuple_reader));
 	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Layers", ntuple_reader));
+	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Modules", ntuple_reader));
 	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Ring12", ntuple_reader));
+	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Eta", ntuple_reader));
+	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Alpha", ntuple_reader));
+	histogram_requests -> AddNewPostfix(Postfix_factory::get_postfix("Beta", ntuple_reader));
 
 	histogram_requests -> AddSpecial({.name = "HitEfficiency", .name_plus_1d = "ValidHit", .axis = "Hit Efficiency", .axis_plus_1d = "Valid Hit"});
+
 
 	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("Ladders", ntuple_reader, is_mc));
 	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("Modules", ntuple_reader, is_mc));
@@ -62,12 +71,16 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("ImpactAngleAlpha", ntuple_reader, is_mc));
 	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("ImpactAngleBeta", ntuple_reader, is_mc));
 	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("ImpactAngleGamma", ntuple_reader, is_mc));
+	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("DXCL", ntuple_reader, is_mc));
+	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("DYCL", ntuple_reader, is_mc));
+	histogram_requests -> AddNewFillParam(Fill_parameter_factory::get_fill_parameter("DRCL", ntuple_reader, is_mc));
 	// FIXME: Test this
 	// histogram_requests -> SmartHistos::AddNewFillParam("TrkPt", {.nbin=   9, .bins={0, 0.2, 0.4,0.6, 0.8, 1, 1.5, 2, 5, 20}, .fill=[&ntuple_reader](){ return ntuple_reader -> get_traj_field_ptr() -> trk.pt;}, .axis_title="Trackp_{T} (GeV/c)"});
 
 	histogram_requests -> AddNewCut(Cut_factory::get_cut("zerobias", ntuple_reader)); 
 	histogram_requests -> AddNewCut(Cut_factory::get_cut("nvtx", ntuple_reader)); 
-	histogram_requests -> AddNewCut(Cut_factory::get_cut("effcut_all", ntuple_reader)); 
+	histogram_requests -> AddNewCut(Cut_factory::get_cut("effcut_all", ntuple_reader));
+	histogram_requests -> AddNewCut(Cut_factory::get_cut("bpix", ntuple_reader));
 
 	histogram_requests -> SetHistoWeights({});
 	if(is_mc)
@@ -82,8 +95,6 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistos("eventTree", {.fill="Nvtx",      .pfs={},       .cuts={"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});
 	// histogram_requests -> AddHistos("eventTree", {.fill="Instlumi", .pfs={"Layers"}, .cuts={}, .draw="COLZ", .opt="", .ranges={0.0, 0.0}});  
 	histogram_requests -> AddHistos("eventTree", {.fill="Instlumi",   .pfs={},      .cuts={"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});
-	// FIXME: Undefined  fill parameters throw no errors...  Might be fixed already, needs testing
-	// histogram_requests -> AddHistos("trajTree", {.fill="TrkPt",      .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
 	// Total Hits in Ladder ROCs
 	histogram_requests -> AddHistos("clustTree", {.fill="Ladders",   .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
 	histogram_requests -> AddHistos("clustTree", {.fill="ClustROCy", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
@@ -97,7 +108,8 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Modules",  .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="PE1", .opt="", .ranges={0.0, 0.0, 0.90, 1.05 }});  
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_TrajROCx", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="PE1", .opt="", .ranges={0.0, 0.0, 0.90, 1.05 }});  
 	// Layer efficiencies
-	histogram_requests -> AddHistos("trajTree", {.fill="Modules",     .pfs={}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
+	histogram_requests -> AddHistos("trajTree", {.fill="TModules",     .pfs={}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="TLadders",     .pfs={}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});
 	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_Layers",     .pfs={        }, .cuts={extra_cut, "effcut_all"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
 	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_Layers",     .pfs={"Ring12"}, .cuts={extra_cut, "effcut_all"}, .draw="HIST", .opt="", .ranges={0.0, 0.0}});  
 	histogram_requests -> AddHistos("trajTree", {.fill="Instlumi",     .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="PE1", .opt="", .ranges={0.0, 0.0}});  
@@ -106,9 +118,42 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleBeta",      .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="PE1", .opt="", .ranges={0.0, 0.0, 0.87, 1.05}});
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleGamma",     .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="PE1", .opt="", .ranges={0.0, 0.0, 0.87, 1.05}});
 	// Hit efficiency : Instlumi
-	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Instlumi",             .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
-	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Instlumi",             .pfs={"Layers", "Ring12"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
-	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Pileup",               .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Instlumi", .pfs={"Layers"},                        .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Instlumi", .pfs={"Layers", "Ring12"},              .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_Pileup",   .pfs={"Layers"},                        .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.90, 1.05}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Validhit"},                      .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Validhit"},                      .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Validhit"},                      .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Eta", "Validhit"},               .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Eta", "Validhit"},               .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Eta", "Validhit"},               .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Eta", "Layers", "Validhit"},     .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Eta", "Layers", "Validhit"},     .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Eta", "Layers", "Validhit"},     .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Alpha", "Validhit"},             .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Alpha", "Validhit"},             .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Alpha", "Validhit"},             .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Alpha", "Layers", "Validhit"},   .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Alpha", "Layers", "Validhit"},   .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Alpha", "Layers", "Validhit"},   .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Beta", "Validhit"},              .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Beta", "Validhit"},              .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Beta", "Validhit"},              .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Beta", "Layers", "Validhit"},    .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Beta", "Layers", "Validhit"},    .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Beta", "Layers", "Validhit"},    .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DXCL",                      .pfs={"Modules", "Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DYCL",                      .pfs={"Modules", "Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="DRCL",                      .pfs={"Modules", "Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DXCL",     .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DYCL",     .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DRCL",     .pfs={"Layers", "Validhit"},            .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="HIST", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DXCL",     .pfs={"Modules", "Validhit"},           .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DYCL",     .pfs={"Modules", "Validhit"},           .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_DRCL",     .pfs={"Modules", "Validhit"},           .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
 
 	/*__________________________________________2D Histograms____________________________________________*/
 
@@ -125,13 +170,28 @@ int ntuple_reader_setup(Ntuple_reader_setup_options setup_options)
 	histogram_requests -> AddHistos("trajTree", {.fill="Instlumi_vs_Ladders",                    .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
 	histogram_requests -> AddHistos("trajTree", {.fill="Instlumi_vs_Modules",                    .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
 	// Total_Hits : Instlumi
-	histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_Ladders_vs_Modules", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
-	histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_ClustROCy_vs_ClustROCx", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
+	// histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_Ladders_vs_Modules", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
+	// histogram_requests -> AddHistos("clustTree", {.fill="Instlumi_vs_ClustROCy_vs_ClustROCx", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});  
 
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleAlpha", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0, 0.92, 1.0}});
 	histogram_requests -> AddHistos("trajTree",  {.fill="HitEfficiency_vs_ImpactAngleBeta_vs_ImpactAngleGamma", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0, 0.92, 1.0}});
-	histogram_requests -> AddHistos("trajTree",  {.fill="ImpactAngleBeta_vs_ImpactAngleAlpha", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
-	histogram_requests -> AddHistos("trajTree",  {.fill="ImpactAngleBeta_vs_ImpactAngleGamma", .pfs={"Layers"}, .cuts={extra_cut, "effcut_all"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="ImpactAngleBeta_vs_ImpactAngleAlpha", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree",  {.fill="ImpactAngleBeta_vs_ImpactAngleGamma", .pfs={"Layers"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="", .ranges={0.0, 0.0, 0.0, 0.0}});
+
+	histogram_requests -> AddHistos("trajTree", {.fill="DYCL_vs_DXCL",    .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DXCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DYCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DRCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DXCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DYCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="DRCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DYCL_vs_DXCL",    .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DXCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DYCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DRCL_vs_Modules", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DXCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DYCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
+	histogram_requests -> AddHistos("trajTree", {.fill="HitEfficiency_vs_DRCL_vs_Ladders", .pfs={"Layers", "Validhit"}, .cuts={extra_cut,"zerobias", "nvtx", "bpix"}, .draw="COLZ", .opt="Norm", .ranges={0.0, 0.0}});
 
 	return 0;
 }
