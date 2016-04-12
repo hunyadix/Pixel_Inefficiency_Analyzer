@@ -23,6 +23,11 @@ class Postfix
 				std::cout << debug_prompt << "~Postfix_base()" << std::endl; 
 			} 
 		};
+		const char* const get_name() {return this -> name;};
+		double operator ()()
+		{
+			return this -> sel();
+		}
 };
 
 #endif

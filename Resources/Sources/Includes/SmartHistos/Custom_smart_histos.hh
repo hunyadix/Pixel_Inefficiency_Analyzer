@@ -14,7 +14,6 @@
 
 class Custom_smart_histos : public SmartHistos
 {
-	using SmartHistos::AddNewPostfix;
 	private:
 		std::vector<std::string> tree_type_keyword_list;
 
@@ -25,6 +24,14 @@ class Custom_smart_histos : public SmartHistos
 		std::map<std::string, double> fill_param_name_to_fill_param_double_map;
 		std::map<std::string, Fill_parameter*> fill_param_name_to_fill_param_object_map;
 		std::map<std::string, std::vector<std::string>> tree_name_to_fill_param_name_collection_map;
+
+		///////////////
+		// Postfixes //
+		///////////////
+
+		std::map<std::string, size_t> postfix_name_to_postfix_size_t_map;
+		std::map<std::string, Postfix*> postfix_name_to_postfix_object_map;
+		std::map<std::string, std::vector<std::string>> tree_name_to_postfix_name_collection_map;
 
 		//////////
 		// Cuts //
@@ -46,15 +53,17 @@ class Custom_smart_histos : public SmartHistos
 	public:
 
 		void AddHistoType(std::string type);
-		void AddNewPostfix(std::unique_ptr<Postfix>& pf_p);
 		void AddNewFillParam(std::unique_ptr<Fill_parameter>& fill_parameter);
+		void AddNewPostfix(std::unique_ptr<Postfix>& postfix_p);
 		void AddNewCut(std::unique_ptr<Histogram_generation::Cut>& cut_p);
 		void AddHistos(std::string tree_type, HistoParams hp, bool AddCutsToTitle = true);
 		void UpdateFillParameter(const std::string& name);
+		void UpdatePostfix(const std::string& name);
 		void UpdateCut(const std::string& name);
 		void UpdateRelevantFillParameters(const std::string& tree_type_keyword);
+		void UpdateRelevantPostfixes(const std::string& tree_type_keyword);
 		void UpdateRelevantCuts(const std::string& tree_type_keyword);
-		void UpdateRelevantFillParametersAndCuts(const std::string& tree_type_keyword);
+		void UpdateRelevantFillParametersPostfixesCuts(const std::string& tree_type_keyword);
 };
 
 #endif

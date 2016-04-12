@@ -27,6 +27,8 @@ namespace Histogram_generation
 			};
 	};
 
+	// High priority trackek azok, amire jó khinégyzettel lehetett megilleszteni a tracket
+
 	Cut_hp::Cut_hp(Ntuple_reader*& ntuple_reader_p)
 	{
 		this -> cut_function = [&ntuple_reader_p]()

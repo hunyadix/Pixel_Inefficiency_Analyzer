@@ -44,7 +44,6 @@ Validálni event.nvertex alapján
 	config.Data.totalUnits = config.Data.unitsPerJob * NJOBS
 	# Példaconfig
 
-
 # Adatbázis generálás recept
 	# Architektúra beállítás 80x-re
 	SCRAM_ARCH=slc6_amd64_gcc493
@@ -116,8 +115,27 @@ Validálni event.nvertex alapján
 
 # Klasztertávolság modulfüggés
 
-	A modu
-
 	Mekkora lenne a hit efficiency, ha a klaszterhozzárendelés távolsága más érték lenne
 	
 	# Szükséges plotok
+
+# 2012-es adat
+/data/gridout/jkarancs/TimingStudy/2012/v3735_INC_SPL1_ns11_5314_MB_2012C_22JanRR_RECO_201278/
+
+# 2012-es Monte-Carlo
+/data/gridout/mbartok/DynIneff/RUN2validation/v3836_COMP_SPL1_ns0_720pre5_MB_GENSIM_flatPU_13TeV_50ns_PSI/
+
+A legkisebb kizárható egység a ROC, pixel szintre nem lehet lemenni, mert a klaszterek átlógnak egyik pixelről a másikra.
+A hatásfok és a klaszter okkupancia egymást kiegészítő információkat adnak.
+
+Példa: 
+
+2, -3-nál van egy piros modul (~100% hatásfok), de nyilván nem igaz, hogy, ez egy jól működő egység.
+A klaszter okkupancia ploton ez a modul harmadakkora bütésszámmal rendelkezik, mint a körülöttük lévők.
+
+Single event upsetes modul: rossz eseményt/nem hatékonyan olvassa ki az eseményeket. Beütések ilyenkor vannak,
+de az események nem azokhoz az eseményekhez tartoznak időben, amihez kellene.
+
+Egy triggerelt esemény felírása után nem tudjuk rögzíteni a következő két eseményt (óraciklust)
+
+A ROC szelekció lényege, hogy csak azokat a ROC-okat nézem, amelyek nem mentek át single event upseten.

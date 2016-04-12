@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 		///////////////////////
 
 		bool tree_loops_requested                      = true;
-		bool analysis_plots_and_calculations_requested = true;
+		bool analysis_plots_and_calculations_requested = false;
 		bool second_loop_requested                     = false;
 		bool second_analysis_requested                 = false;
 
@@ -115,6 +115,9 @@ int main(int argc, char** argv)
 		/////////////////////////
 		// Data for validation //
 		/////////////////////////
+
+		// # A legkozelebbi szomszed atlagos tavolsaga:
+		// <R> = 0.5 * N_alpha^1/2, ahol N_alpha a részecskék sűrűsége
 
 		// input_file_paths_file_name  = "Data/Dcolscans/dcol99p9_paths.txt";
 		// firts_loop_output_file_name = "Results/Dcolscans/dcol99p9.root";
@@ -146,22 +149,32 @@ int main(int argc, char** argv)
 		// General purpose check (data and mc) //
 		/////////////////////////////////////////
 
-		input_file_paths_file_name  = "Data/debug_list.txt";
-		// input_file_paths_file_name  = "Data/PIA_debug.txt";
-		firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
-		analysis_output_name        = "Results/Debug/debug_data_step_2.root";
-		second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
-		second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+		// input_file_paths_file_name  = "Data/debug_list.txt";
+		// // input_file_paths_file_name  = "Data/PIA_debug.txt";
+		// firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
+		// analysis_output_name        = "Results/Debug/debug_data_step_2.root";
+		// second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
+		// second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+
+		//////////////////////
+		// 2012 Monte-Carlo //
+		//////////////////////
+
+		input_file_paths_file_name  = "Data/debug_2012_MC_dynineff.txt";
+		firts_loop_output_file_name = "Results/debug_2012_MC_dynineff/step_1.root";
+		analysis_output_name        = "Results/debug_2012_MC_dynineff/step_2.root";
+		second_loop_output_name     = "Results/debug_2012_MC_dynineff/step_3.root";
+		second_analysis_output_name = "Results/debug_2012_MC_dynineff/step_4.root";
 
 		///////////////////////////////
 		// 2012 general purpose data //
 		///////////////////////////////
 
 		// input_file_paths_file_name  = "Data/2012_data.txt";
-		// firts_loop_output_file_name = "Results/2012/general_step_1.root";
-		// analysis_output_name        = "Results/2012/general_step_2.root";
-		// second_loop_output_name     = "Results/2012/general_step_3.root";
-		// second_analysis_output_name = "Results/2012/general_step_4.root";
+		// firts_loop_output_file_name = "Results/2012/complex_step_1.root";
+		// analysis_output_name        = "Results/2012/complex_step_2.root";
+		// second_loop_output_name     = "Results/2012/complex_step_3.root";
+		// second_analysis_output_name = "Results/2012/complex_step_4.root";
 
 		////////////////////////////////////////////////////
 		// Data or simulation (for instlumi calculation)  //
@@ -174,8 +187,11 @@ int main(int argc, char** argv)
 		//////////////////////////////////////////////////////
 
 		// Reweighting is active, when is_mc is true.
-		std::string reweighting_file_path      = "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/input/pileup_data_2232b_69mb.root";
-		std::string reweighting_histogram_name = "pileup";
+		// std::string reweighting_file_path      = "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/input/pileup_data_2232b_69mb.root";
+		// std::string reweighting_histogram_name = "pileup";
+
+		std::string reweighting_file_path      = "/afs/cern.ch/user/a/ahunyadi/private/Pixel_Inefficiency_Analyzer/Results/2012/general_step_1.root";
+		std::string reweighting_histogram_name = "Pileup/Pileup";
 
 		/////////////////////////
 		// Extra cut selection //
