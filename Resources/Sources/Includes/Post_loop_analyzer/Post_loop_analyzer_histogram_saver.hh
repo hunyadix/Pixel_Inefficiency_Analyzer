@@ -652,6 +652,7 @@ void Post_loop_analyzer_histogram_saver::prepare_to_save_histograms()
 		this -> relative_cluster_occupancy_on_modules_map_layer_2 -> GetYaxis() -> SetRangeUser(-16.5, 16.5);
 		this -> autoset_maximum(this -> relative_cluster_occupancy_on_ROCs_map_layer_1);
 		this -> autoset_maximum(this -> relative_cluster_occupancy_on_ROCs_map_layer_2);
+		// relative_cluster_occupancy_on_ROCs_map_layer_2 -> GetZaxis() -> SetRangeUser(0.0, 0.015);
 		this -> autoset_maximum(this -> relative_cluster_occupancy_on_ROCs_map_layer_3);
 		this -> relative_cluster_occupancy_on_ROCs_map_layer_1 -> GetYaxis() -> SetRangeUser(-10.5, 10.5);
 		this -> relative_cluster_occupancy_on_ROCs_map_layer_2 -> GetYaxis() -> SetRangeUser(-16.5, 16.5);

@@ -73,9 +73,9 @@ int main(int argc, char** argv)
 		}
 		std::cout << process_prompt << process_name << " is being executed..." << std::endl;
 
-		/////////////////////////////////////////////////
-		// Print out where the program root is located //
-		/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// Print out where the program root is located //
+/////////////////////////////////////////////////
 		
 		char buffer[256];
 		char *ppath = getcwd(buffer, sizeof(buffer));
@@ -84,9 +84,9 @@ int main(int argc, char** argv)
 			std::cout << debug_prompt << "Buffer: " << buffer << std::endl;
 		}
 
-		////////////////////
-		// File variables //
-		////////////////////
+////////////////////
+// File variables //
+////////////////////
 
 		std::string input_data_file_name; // Disabled, use input file_paths instead
 		std::string input_file_paths_file_name;
@@ -97,78 +97,80 @@ int main(int argc, char** argv)
 
 		std::string bad_ROC_file_input_path;       // For reading saved bad ROCs
 		std::string analysis_output_parent_folder; // For save the bad ROC list
-		std::string bad_roc_list_save_path;
+		std::string bad_ROC_list_save_path;
 
-		///////////////////////
-		// Control variables //
-		///////////////////////
+///////////////////////
+// Control variables //
+///////////////////////
 
 		bool tree_loops_requested                      = true;
 		bool analysis_plots_and_calculations_requested = false;
 		bool second_loop_requested                     = false;
 		bool second_analysis_requested                 = false;
 
-		/////////////////////
-		// Data file paths //
-		/////////////////////
+/////////////////////
+// Data file paths //
+/////////////////////
 		
-		/////////////////////////
-		// Data for validation //
-		/////////////////////////
+/////////////////////////
+// Data for validation //
+/////////////////////////
 
 		// # A legkozelebbi szomszed atlagos tavolsaga:
 		// <R> = 0.5 * N_alpha^1/2, ahol N_alpha a részecskék sűrűsége
 
-		// input_file_paths_file_name  = "Data/Dcolscans/dcol99p9_paths.txt";
-		// firts_loop_output_file_name = "Results/Dcolscans/dcol99p9.root";
+		// input_file_paths_file_name   = "Data/Dcolscans/dcol100_paths.txt";
+		// firts_loop_output_file_name  = "Results/Dcolscans/dcol100.root";
+		// analysis_output_name         = "Results/Dcolscans/dcol100_stats.root";
+		// second_loop_output_file_name = "Results/Dcolscans/dcol100_with_filtering.root";
 
-		// input_file_paths_file_name  = "Data/reweighting_validadtion.txt";
-		// firts_loop_output_file_name = "Results/High_stat_2232b/reweighting_validation_data_step_1.root";
-		// analysis_output_name        = "Results/High_stat_2232b/reweighting_validation_data_step_2.root";
-		// second_loop_output_name     = "Results/High_stat_2232b/reweighting_validation_data_step_3.root";
-		// second_analysis_output_name = "Results/High_stat_2232b/reweighting_validation_data_step_4.root";
+		// input_file_paths_file_name  = "Data/Reweighting_parts/reweighting_part_10.txt";
+		// firts_loop_output_file_name = "Results/High_stat_2232b/reweighting_validation_data_part_10_step_1.root";
+		// analysis_output_name        = "Results/High_stat_2232b/reweighting_validation_data_part_10_step_2.root";
+		// second_loop_output_name     = "Results/High_stat_2232b/reweighting_validation_data_part_10_step_3.root";
+		// second_analysis_output_name = "Results/High_stat_2232b/reweighting_validation_data_part_10_step_4.root";
 		
-		////////////////////////////////////////////////
-		// Low statistics check (data for validation) //
-		////////////////////////////////////////////////
+////////////////////////////////////////////////
+// Low statistics check (data for validation) //
+////////////////////////////////////////////////
 
 		// input_file_paths_file_name  = "Data/low_stat_reweighting_validadtion.txt";
-		// firts_loop_output_file_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_1.root";
-		// analysis_output_name        = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_2.root";
-		// second_loop_output_name     = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_3.root";
-		// second_analysis_output_name = "Results/Low_stat_rew_val/low_stat_reweighting_validation_step_4.root";
+		// firts_loop_output_file_name = "Results/Low_stat_rew_val/debug_low_stat_reweighting_validation_step_1.root";
+		// analysis_output_name        = "Results/Low_stat_rew_val/debug_low_stat_reweighting_validation_step_2.root";
+		// second_loop_output_name     = "Results/Low_stat_rew_val/debug_low_stat_reweighting_validation_step_3.root";
+		// second_analysis_output_name = "Results/Low_stat_rew_val/debug_low_stat_reweighting_validation_step_4.root";
 		
-		///////////////////////
-		// MC for validation //
-		///////////////////////
+///////////////////////
+// MC for validation //
+///////////////////////
 
 		// input_file_paths_file_name  = "Data/mc_minbias_2015_paths.txt";
 		// firts_loop_output_file_name = "Results/mc_for_reweighting_validation.root";
 
-		/////////////////////////////////////////
-		// General purpose check (data and mc) //
-		/////////////////////////////////////////
+/////////////////////////////////////////
+// General purpose check (data and mc) //
+/////////////////////////////////////////
 
-		// input_file_paths_file_name  = "Data/debug_list.txt";
-		// // input_file_paths_file_name  = "Data/PIA_debug.txt";
-		// firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
-		// analysis_output_name        = "Results/Debug/debug_data_step_2.root";
-		// second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
-		// second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+		input_file_paths_file_name  = "Data/debug_list.txt";
+		// input_file_paths_file_name  = "Data/PIA_debug.txt";
+		firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
+		analysis_output_name        = "Results/Debug/debug_data_step_2.root";
+		second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
+		second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
 
-		//////////////////////
-		// 2012 Monte-Carlo //
-		//////////////////////
+//////////////////////
+// 2012 Monte-Carlo //
+//////////////////////
 
-		input_file_paths_file_name  = "Data/debug_2012_MC_dynineff.txt";
-		firts_loop_output_file_name = "Results/debug_2012_MC_dynineff/step_1.root";
-		analysis_output_name        = "Results/debug_2012_MC_dynineff/step_2.root";
-		second_loop_output_name     = "Results/debug_2012_MC_dynineff/step_3.root";
-		second_analysis_output_name = "Results/debug_2012_MC_dynineff/step_4.root";
+		// input_file_paths_file_name  = "Data/2012_MC_dynineff.txt";
+		// firts_loop_output_file_name = "Results/2012_MC_dynineff/step_1.root";
+		// analysis_output_name        = "Results/2012_MC_dynineff/step_2.root";
+		// second_loop_output_name     = "Results/2012_MC_dynineff/step_3.root";
+		// second_analysis_output_name = "Results/2012_MC_dynineff/step_4.root";
 
-		///////////////////////////////
-		// 2012 general purpose data //
-		///////////////////////////////
+///////////////////////////////
+// 2012 general purpose data //
+///////////////////////////////
 
 		// input_file_paths_file_name  = "Data/2012_data.txt";
 		// firts_loop_output_file_name = "Results/2012/complex_step_1.root";
@@ -176,15 +178,25 @@ int main(int argc, char** argv)
 		// second_loop_output_name     = "Results/2012/complex_step_3.root";
 		// second_analysis_output_name = "Results/2012/complex_step_4.root";
 
-		////////////////////////////////////////////////////
-		// Data or simulation (for instlumi calculation)  //
-		////////////////////////////////////////////////////
+/////////////////////////
+// FPix check for run  //
+/////////////////////////
+
+		// input_file_paths_file_name  = "Data/2016_run_273725_no_cut.txt";
+		// firts_loop_output_file_name = "Results/FPix_check/step_1.root";
+		// analysis_output_name        = "Results/FPix_check/step_2.root";
+		// second_loop_output_name     = "Results/FPix_check/step_3.root";
+		// second_analysis_output_name = "Results/FPix_check/step_4.root";
+
+////////////////////////////////////////////////////
+// Data or simulation (for instlumi calculation)  //
+////////////////////////////////////////////////////
 
 		bool is_mc = false; // Turn on reweighting
 
-		//////////////////////////////////////////////////////
-		// Pileup reweighting based on this file/histoggram //
-		//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+// Pileup reweighting based on this file/histoggram //
+//////////////////////////////////////////////////////
 
 		// Reweighting is active, when is_mc is true.
 		// std::string reweighting_file_path      = "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/input/pileup_data_2232b_69mb.root";
@@ -193,32 +205,33 @@ int main(int argc, char** argv)
 		std::string reweighting_file_path      = "/afs/cern.ch/user/a/ahunyadi/private/Pixel_Inefficiency_Analyzer/Results/2012/general_step_1.root";
 		std::string reweighting_histogram_name = "Pileup/Pileup";
 
-		/////////////////////////
-		// Extra cut selection //
-		/////////////////////////
+/////////////////////////
+// Extra cut selection //
+/////////////////////////
 
-		bool set_extracut_2232b = false;
+		bool add_custom_extra_cut = true;
 
-		/////////////////////////////
-		// Read bad ROCs from file //
-		/////////////////////////////
+/////////////////////////////
+// Read bad ROCs from file //
+/////////////////////////////
 
-		bool read_bad_ROCs_from_file = false;
+		bool read_bad_ROCs_from_file = true;
 		bad_ROC_file_input_path = "";
 
-		////////////////////////////
-		// Bad ROC list save path //
-		////////////////////////////
+////////////////////////////
+// Bad ROC list save path //
+////////////////////////////
 
 		if(analysis_output_name.size())
 		{
 			analysis_output_parent_folder = analysis_output_name.substr(0, analysis_output_name.find_last_of("/\\"));
-			bad_roc_list_save_path = analysis_output_parent_folder + "/bad_ROC_list.txt";
+			bad_ROC_list_save_path = analysis_output_parent_folder + "/bad_ROC_list.txt";
+			bad_ROC_file_input_path = bad_ROC_list_save_path;
 		}
 
-		//////////////
-		// Schedule //
-		//////////////
+//////////////
+// Schedule //
+//////////////
 
 		int schedule = 
 		               Ntuple_reader::Loop_request_flags::event_tree_loop_request |
@@ -228,9 +241,9 @@ int main(int argc, char** argv)
 		               Ntuple_reader::Loop_request_flags::traj_tree_loop_request  |
 		               0;
 
-		//////////////////////////////////////////////////////////
-		// Parsing command line arguments and performing checks //
-		//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+// Parsing command line arguments and performing checks //
+//////////////////////////////////////////////////////////
 
 		// Disabled
 		//parse_main_command_line_arguments(argc, argv, input_data_file_name, firts_loop_output_file_name);
@@ -252,18 +265,18 @@ int main(int argc, char** argv)
 			timer -> restart("Preparing to run tree loops...");
 			Ntuple_reader* ntuple_reader = new Ntuple_reader();
 
-			/******************************************************************************************************/
-			/*                                     Initializing the data files                                    */
-			/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                     Initializing the data files                                    */
+/******************************************************************************************************/
 
 			ntuple_reader -> read_input_paths_from_file(input_file_paths_file_name.c_str());
 			ntuple_reader -> set_output_file(firts_loop_output_file_name, "RECREATE");
 
 			ntuple_reader -> set_schedule(schedule);
 
-			/******************************************************************************************************/
-			/*                                        Configuring the run                                         */
-			/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                        Configuring the run                                         */
+/******************************************************************************************************/
 
 			std::string extra_cut("");
 
@@ -271,37 +284,22 @@ int main(int argc, char** argv)
 			std::shared_ptr<Histogram_reweighter> histogram_reweighter(new Histogram_reweighter(ntuple_reader));
 			histogram_requests -> AddNewCut(Cut_factory::get_cut("", ntuple_reader));
 			
-			//////////////////////////////////////////////
-			// Extra cut for buncspacing (2232 bunches) //
-			//////////////////////////////////////////////
+///////////////////////
+// Custom extra cuts //
+///////////////////////
 
 			std::unique_ptr<Histogram_generation::Cut> bunchspacing_cut;
 
-			if(set_extracut_2232b)
+			if(add_custom_extra_cut)
 			{
-				auto bunchspacing_selection_function = [&ntuple_reader] ()
-				{
-					// if(event_field_ptr -> GetBranchStatus("event"))
-					// {
-					// 	std::cerr << error_prompt << "Error reading the event_tree"
-					// }
-					EventData* event_field_ptr = ntuple_reader -> get_event_field_ptr();
-					if(!event_field_ptr)
-					{
-						std::cerr << error_prompt << "Error fetching the event field pointer for the bunchspacing selection!" << std::endl;
-					}
-					int run = event_field_ptr -> run;
-					if((run >= 260099 && run <= 260235) || (run >= 260424 && run <= 260627))
-					{
-						return true; 
-					}
-					return false;
-				};
-
 				const char* bunchspacing_selection_name = "bunchspacing_selection";
 				bunchspacing_cut.reset(new Histogram_generation::Cut);
 				bunchspacing_cut -> set_name(bunchspacing_selection_name);
-				bunchspacing_cut -> set_cut_function(bunchspacing_selection_function);
+// 2232 bunch cut
+				const int& run = ntuple_reader -> get_event_field_ptr() -> run;
+				// bunchspacing_cut -> set_cut_function([&run] () { return (run >= 260099 && run <= 260235) || (run >= 260424 && run <= 260627); } );
+// events of run 273725 (2016, pilot_blade mystery)	
+				bunchspacing_cut -> set_cut_function([&run] () { return run == 273725; } );
 				histogram_requests -> AddNewCut(bunchspacing_cut);
 				extra_cut = bunchspacing_selection_name;
 			}
@@ -323,9 +321,9 @@ int main(int argc, char** argv)
 			};
 			timer -> print_seconds("Took about ", " second(s).");
 
-			/******************************************************************************************************/
-			/*                                  Looping through the Ntuple files                                  */
-			/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                  Looping through the Ntuple files                                  */
+/******************************************************************************************************/
 			
 			timer -> restart("Running tree loops...");
 			ntuple_reader -> run();
@@ -333,9 +331,9 @@ int main(int argc, char** argv)
 			delete ntuple_reader; // contains call to Input_output_interface destructor, might interfere with root memory handling but is fine.
 		}
 
-		/////////////////////////////////////////////////////////
-		// Creating plots, and filtering the data for bad ROCS //
-		/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+// Creating plots, and filtering the data for bad ROCS //
+/////////////////////////////////////////////////////////
 
 		if(analysis_plots_and_calculations_requested != 0)
 		{
@@ -344,7 +342,7 @@ int main(int argc, char** argv)
 			{
 				std::cout << error_prompt << "Function analysis_plots_and_calculations() seems to have invalid results. (might ended with failure?)" << std::endl;
 			}
-			std::ofstream bad_ROC_output_file(bad_roc_list_save_path);
+			std::ofstream bad_ROC_output_file(bad_ROC_list_save_path);
 			for(const auto& bad_ROC_position: bad_ROC_list)
 			{
 				bad_ROC_output_file << bad_ROC_position.layer << " " << bad_ROC_position.module << " " << bad_ROC_position.ladder << std::endl;
@@ -352,20 +350,22 @@ int main(int argc, char** argv)
 			bad_ROC_output_file.close();
 		}
 
-		/////////////////////////////////
-		// Loop with bad ROC exclusion //
-		/////////////////////////////////
+/////////////////////////////////
+// Loop with bad ROC exclusion //
+/////////////////////////////////
 
 		if(second_loop_requested)
 		{
-			if(bad_ROC_list.size() == 0)
-			{
-				std::cerr << error_prompt << "The number of filtered bad ROCs is 0." << std::endl;
-			}
 			if(read_bad_ROCs_from_file)
 			{
 				bad_ROC_list.clear();
 				std::ifstream bad_ROC_input_file(bad_ROC_file_input_path);
+				if(!(bad_ROC_input_file.is_open()))
+				{
+					std::cerr << error_prompt << "Error opening the bad ROC input file." << std::endl;
+					std::cerr << debug_prompt << "Input path: " << bad_ROC_file_input_path << std::endl; 
+					exit(-1);
+				}
 				while(1)
 				{
 					std::string line;
@@ -373,9 +373,10 @@ int main(int argc, char** argv)
 					std::stringstream data_stream(line);
 					if(bad_ROC_input_file.good())
 					{
-						int layer;
-						int module;
-						int ladder;
+						int layer  = 0;
+						int module = 0;
+						int ladder = 0;
+						data_stream >> layer >> module >> ladder;
 						ROC_position position(layer, module, ladder);
 						bad_ROC_list.insert(position);
 					}
@@ -384,6 +385,10 @@ int main(int argc, char** argv)
 						break;
 					}
 				}
+			}
+			if(bad_ROC_list.size() == 0)
+			{
+				std::cerr << error_prompt << "The number of filtered bad ROCs is 0." << std::endl;
 			}
 			int second_loop_and_calculations_results = second_loop(argc, argv, input_file_paths_file_name, second_loop_output_name, schedule, 
 			                                                       reweighting_file_path, reweighting_histogram_name, bad_ROC_list, is_mc);
@@ -402,9 +407,9 @@ int main(int argc, char** argv)
 			} 
 		}
 
-		/******************************************************************************************************/
-		/*                                            Terminating                                             */
-		/******************************************************************************************************/
+/******************************************************************************************************/
+/*                                            Terminating                                             */
+/******************************************************************************************************/
 
 	}
 	catch(const std::exception& e)

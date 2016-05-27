@@ -12,7 +12,7 @@
 #include "Postfix_recipes/Alpha_postfix.hh"
 #include "Postfix_recipes/Beta_postfix.hh"
 #include "Postfix_recipes/PassedEffcuts_postfix.hh"
-
+#include "Postfix_recipes/Unambiguous_hit_postfix.hh"
 
 class Postfix_factory
 {
@@ -63,6 +63,11 @@ std::unique_ptr<Postfix>& Postfix_factory::get_postfix(const std::string& type_p
 	if(type_p == "PassedEffcuts")
 	{
 		postfix_list.push_back(std::unique_ptr<Postfix>(new PassedEffcuts_postfix(ntuple_reader_p)));
+		return postfix_list.back();
+	}
+	if(type_p == "UnambiguousHit")
+	{
+		postfix_list.push_back(std::unique_ptr<Postfix>(new Unambiguous_hit_postfix(ntuple_reader_p)));
 		return postfix_list.back();
 	}
 	std::cerr << error_prompt << "Failed to generate postfix: " << type_p << ". (Invalid keyword?)" << std::endl;

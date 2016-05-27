@@ -6,21 +6,29 @@
 
 #include "Fill_parameter_recipes/Ladders_fill_parameter.hh"
 #include "Fill_parameter_recipes/Modules_fill_parameter.hh"
+#include "Fill_parameter_recipes/FPixBlade_fill_parameter.hh"
+#include "Fill_parameter_recipes/FPixPanel_fill_parameter.hh"
+#include "Fill_parameter_recipes/ClustFPixBlade_fill_parameter.hh"
+#include "Fill_parameter_recipes/ClustFPixPanel_fill_parameter.hh"
 #include "Fill_parameter_recipes/Hit_efficiency_fill_parameter.hh"
 #include "Fill_parameter_recipes/TrajROCx_fill_parameter.hh"
 #include "Fill_parameter_recipes/TrajROCy_fill_parameter.hh"
 #include "Fill_parameter_recipes/ClustROCx_fill_parameter.hh"
 #include "Fill_parameter_recipes/ClustROCy_fill_parameter.hh"
 #include "Fill_parameter_recipes/Nvtx_fill_parameter.hh"
+#include "Fill_parameter_recipes/Trkpt_fill_parameter.hh"
 #include "Fill_parameter_recipes/Instlumi_fill_parameter.hh"
 #include "Fill_parameter_recipes/Pileup_fill_parameter.hh"
 #include "Fill_parameter_recipes/Layers_fill_parameter.hh"
+#include "Fill_parameter_recipes/LayersDisks_fill_parameter.hh"
 #include "Fill_parameter_recipes/ImpactAngleAlpha_fill_parameter.hh"
 #include "Fill_parameter_recipes/ImpactAngleBeta_fill_parameter.hh"
 #include "Fill_parameter_recipes/ImpactAngleGamma_fill_parameter.hh"
 #include "Fill_parameter_recipes/DXCL_fill_parameter.hh"
 #include "Fill_parameter_recipes/DYCL_fill_parameter.hh"
 #include "Fill_parameter_recipes/DRCL_fill_parameter.hh"
+#include "Fill_parameter_recipes/DRCL_second_cluster_fill_parameter.hh"
+#include "Fill_parameter_recipes/LocalPhi_fill_parameter.hh"
 
 class Fill_parameter_factory
 {
@@ -41,6 +49,26 @@ std::unique_ptr<Fill_parameter>& Fill_parameter_factory::get_fill_parameter(cons
 	if(type_p == "Modules")
 	{
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new Modules_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "FPixBlade")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new FPixBlade_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "FPixPanel")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new FPixPanel_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "ClustFPixBlade")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new ClustFPixBlade_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "ClustFPixPanel")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new ClustFPixPanel_fill_parameter(ntuple_reader_p)));
 		return fill_parameter_list.back();
 	}
 	if(type_p == "TLadders")
@@ -85,6 +113,11 @@ std::unique_ptr<Fill_parameter>& Fill_parameter_factory::get_fill_parameter(cons
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new Nvtx_fill_parameter(ntuple_reader_p)));
 		return fill_parameter_list.back();
 	}
+	if(type_p == "Trkpt")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new Trkpt_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
 	if(type_p == "Instlumi")
 	{
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new Instlumi_fill_parameter(ntuple_reader_p)));
@@ -98,6 +131,11 @@ std::unique_ptr<Fill_parameter>& Fill_parameter_factory::get_fill_parameter(cons
 	if(type_p == "Layers")
 	{
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new Layers_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "LayersDisks")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new LayersDisks_fill_parameter(ntuple_reader_p)));
 		return fill_parameter_list.back();
 	}
 	if(type_p == "ImpactAngleAlpha")
@@ -128,6 +166,16 @@ std::unique_ptr<Fill_parameter>& Fill_parameter_factory::get_fill_parameter(cons
 	if(type_p == "DRCL")
 	{
 		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new DRCL_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "DRCLSecondCluster")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new DRCL_second_cluster_fill_parameter(ntuple_reader_p)));
+		return fill_parameter_list.back();
+	}
+	if(type_p == "LocalPhi")
+	{
+		fill_parameter_list.push_back(std::unique_ptr<Fill_parameter>(new LocalPhi_fill_parameter(ntuple_reader_p)));
 		return fill_parameter_list.back();
 	}
 	std::cerr << error_prompt << "Failed to generate postfix: " << type_p << ". (Invalid keyword?)" << std::endl;

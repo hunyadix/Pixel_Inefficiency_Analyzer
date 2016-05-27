@@ -20,7 +20,41 @@ Ntuple_reader::~Ntuple_reader()
 	}
 }
 
-void Ntuple_reader::tree_loop(TTree* tree_p, std::string& tree_name_p)
+void Ntuple_reader::set_schedule(const int schedule_p)
+{
+	this -> schedule = schedule_p;
+}
+
+void Ntuple_reader::set_histogram_requests(Custom_smart_histos* histogram_requests_p)
+{
+	this -> histogram_requests = histogram_requests_p;
+}
+
+Custom_smart_histos* Ntuple_reader::get_histogram_requests()
+{
+	return this -> histogram_requests;
+}
+
+void Ntuple_reader::conditional_loop_files(bool condition, const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop)
+{
+	if(condition)
+	{
+		loop_files(selected_tree_name, selected_tree_loop);
+	}
+}
+
+void Ntuple_reader::loop_files(const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop)
+{
+		for(auto file_path_ptr = this -> input_file_path_list.begin(); file_path_ptr != this -> input_file_path_list.end(); ++file_path_ptr)
+		{
+			this -> change_input_file(*file_path_ptr);
+			std::cout << process_prompt << "Looping on tree: " << selected_tree_name << std::left << std::setw(35) << ".";
+			selected_tree_loop();
+			std::cout << "   " << file_path_ptr - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
+		}
+}
+
+void Ntuple_reader::tree_loop(TTree* tree_p, const std::string& tree_name_p)
 {
 	Int_t n_entries = tree_p -> GetEntries();
 	float percent_done = 0;
@@ -69,36 +103,31 @@ void Ntuple_reader::tree_loop(TTree* tree_p, std::string& tree_name_p)
 void Ntuple_reader::event_tree_loop()
 {
 	this -> prepare_to_run_on_event_tree();
-	std::string tree_name = "eventTree";
-	this -> tree_loop(this -> event_tree, tree_name);
+	this -> tree_loop(this -> event_tree, "eventTree");
 }
 
 void Ntuple_reader::lumi_tree_loop()
 {
 	this -> prepare_to_run_on_lumi_tree();
-	std::string tree_name = "lumiTree";
-	this -> tree_loop(this -> lumi_tree, tree_name);
+	this -> tree_loop(this -> lumi_tree, "lumiTree");
 }
 
 void Ntuple_reader::run_tree_loop()
 {
 	this -> prepare_to_run_on_run_tree();
-	std::string tree_name = "runTree";
-	this -> tree_loop(this -> run_tree, tree_name);
+	this -> tree_loop(this -> run_tree, "runTree");
 }
 
 void Ntuple_reader::traj_tree_loop()
 {
 	this -> prepare_to_run_on_traj_tree();
-	std::string tree_name = "trajTree";
-	this -> tree_loop(this -> traj_tree, tree_name);
+	this -> tree_loop(this -> traj_tree, "trajTree");
 }
 
 void Ntuple_reader::clust_tree_loop()
 {
 	this -> prepare_to_run_on_clust_tree();
-	std::string tree_name = "clustTree";
-	this -> tree_loop(this -> clust_tree, tree_name);
+	this -> tree_loop(this -> clust_tree, "clustTree");
 }
 
 void Ntuple_reader::save_histogram_list()
@@ -150,15 +179,10 @@ void Ntuple_reader::read_input_paths_from_file(const std::string& input_paths_fi
 	}
 }
 
-void Ntuple_reader::set_schedule(const int schedule_p)
+void Ntuple_reader::debug_print_current_input_name()
 {
-	this -> schedule = schedule_p;
-}
-
-void Ntuple_reader::set_histogram_requests(Custom_smart_histos* histogram_requests_p)
-{
-	this -> histogram_requests = histogram_requests_p;
-}
+	std::cerr << debug_prompt << this -> get_input_file_name() << std::endl;
+};
 
 void Ntuple_reader::run()
 {
@@ -167,61 +191,12 @@ void Ntuple_reader::run()
 		std::cerr << error_prompt << "Error in Ntuple_reader::run(): unset histogram_requests." << std::endl;
 		exit(-1);
 	}
-	if(this -> schedule & Loop_request_flags::event_tree_loop_request)
-	{
-		for(auto it = this -> input_file_path_list.begin(); it != this -> input_file_path_list.end(); ++it)
-		{
-			const std::string& file_path = *it;
-			this -> change_input_file(file_path);
-			std::cout << process_prompt << std::left << std::setw(40) << "Looping on tree: event_tree.";
-			this -> event_tree_loop();
-			std::cout << "   " << it - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
-		}
-	}
-	if(this -> schedule & Loop_request_flags::lumi_tree_loop_request)
-	{
-		for(auto it = this -> input_file_path_list.begin(); it != this -> input_file_path_list.end(); ++it)
-		{
-			const std::string& file_path = *it;
-			this -> change_input_file(file_path);
-			std::cout << process_prompt << std::left << std::setw(40) << "Looping on tree: lumi_tree.";
-			this -> lumi_tree_loop();
-			std::cout << "   " << it - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
-		}
-	}
-	if(this -> schedule & Loop_request_flags::run_tree_loop_request)
-	{
-		for(auto it = this -> input_file_path_list.begin(); it != this -> input_file_path_list.end(); ++it)
-		{
-			const std::string& file_path = *it;
-			this -> change_input_file(file_path);
-			std::cout << process_prompt << std::left << std::setw(40) << "Looping on tree: run_tree.";
-			this -> run_tree_loop();
-			std::cout << "   " << it - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
-		}
-	}
-	if(this -> schedule & Loop_request_flags::clust_tree_loop_request)
-	{
-		for(auto it = this -> input_file_path_list.begin(); it != this -> input_file_path_list.end(); ++it)
-		{
-			const std::string& file_path = *it;
-			this -> change_input_file(file_path);
-			std::cout << process_prompt << std::left << std::setw(40) <<  "Looping on tree: clust_tree.";
-			this -> clust_tree_loop();
-			std::cout << "   " << it - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
-		}
-	}
-	if(this -> schedule & Loop_request_flags::traj_tree_loop_request)
-	{
-		for(auto it = this -> input_file_path_list.begin(); it != this -> input_file_path_list.end(); ++it)
-		{
-			const std::string& file_path = *it;
-			this -> change_input_file(file_path);
-			std::cout << process_prompt << std::left << std::setw(40) <<  "Looping on tree: traj_tree.";
-			this -> traj_tree_loop();
-			std::cout << "   " << it - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
-		}
-	}
+	// Tree names do not matter here
+	conditional_loop_files((this -> schedule & Loop_request_flags::event_tree_loop_request), "event_tree", std::bind(&Ntuple_reader::event_tree_loop, this));
+	conditional_loop_files((this -> schedule & Loop_request_flags::lumi_tree_loop_request),  "lumi_tree",  std::bind(&Ntuple_reader::lumi_tree_loop, this));
+	conditional_loop_files((this -> schedule & Loop_request_flags::run_tree_loop_request),   "run_tree",   std::bind(&Ntuple_reader::run_tree_loop, this));
+	conditional_loop_files((this -> schedule & Loop_request_flags::clust_tree_loop_request), "clust_tree", std::bind(&Ntuple_reader::clust_tree_loop, this));
+	conditional_loop_files((this -> schedule & Loop_request_flags::traj_tree_loop_request),  "traj_tree",  std::bind(&Ntuple_reader::traj_tree_loop, this));
 	std::cout << process_prompt << std::left << std::setw(45) << "Looping finished." << std::endl;
 	std::cout << process_prompt << "Saving histograms: " << std::left << std::setw(30) << "in progress." << std::flush;
 	this -> save_histogram_list();

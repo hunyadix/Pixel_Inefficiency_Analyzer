@@ -30,7 +30,6 @@ int second_loop(int argc, char** argv, const std::string& second_loop_input_path
 
 	Ntuple_reader* ntuple_reader = new Ntuple_reader();
 
-	ntuple_reader -> open_input_file("/data/gridout/jkarancs/TimingStudy/2012/v3836_COMP_SPL2_ns0_712_MB_RECO_203002/Ntuple_144_1_GDK.root");
 	ntuple_reader -> read_input_paths_from_file(second_loop_input_paths_p.c_str());
 	ntuple_reader -> set_output_file(second_loop_output_path_p.c_str(), "RECREATE");
 

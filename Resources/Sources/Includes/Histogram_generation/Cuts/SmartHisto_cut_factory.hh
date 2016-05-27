@@ -84,7 +84,7 @@ namespace Histogram_generation
 		if(!cut_zerobias) {cut_zerobias.reset( new Cut_zerobias( ntuple_reader_p));}
 		if(!cut_pt)       {cut_pt.reset(       new Cut_pt(       ntuple_reader_p));}
 		if(!cut_valmis)   {cut_valmis.reset(   new Cut_valmis(   ntuple_reader_p));}
-		if(!cut_bpix)   {cut_bpix.reset(       new Cut_bpix(     ntuple_reader_p));}
+		if(!cut_bpix)     {cut_bpix.reset(     new Cut_bpix(     ntuple_reader_p));}
 
 		if(type_p == "zerobias")
 		{

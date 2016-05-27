@@ -13,25 +13,27 @@
 
 // Own classes
 #if DATASTRUCT_VER == 28
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/DataStruct_v28.h"
+#include "../interface/DataStruct_v28.h"
 #elif DATASTRUCT_VER == 29
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/DataStruct_v29.h"
+#include "../interface/DataStruct_v29.h"
 #elif DATASTRUCT_VER == 34
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/DataStruct_v34.h"
+#include "../interface/DataStruct_v34.h"
 #elif DATASTRUCT_VER == 35
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/DataStruct_v35.h"
+#include "../interface/DataStruct_v35.h"
 #elif DATASTRUCT_VER == 36
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/DataStruct_v36.h"
+#include "../interface/DataStruct_v36.h"
 #endif
 #if TREEREADER_VER == 29
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/TreeReader_v29.h" // Must follow DataStruct
+#include "../interface/TreeReader_v29.h" // Must follow DataStruct
 #elif TREEREADER_VER >= 30 && TREEREADER_VER <= 36
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/TreeReader_v30.h" // Must follow DataStruct
+#include "../interface/TreeReader_v30.h"
 #elif TREEREADER_VER >= 37
-#include "/data/jkarancs/CMSSW/TimingStudy/CMSSW_7_1_0_pre1/src/DPGAnalysis/PixelTimingStudy/test/PixelHistoMaker/interface/TreeReader_v38.h" // Must follow DataStruct
+#include "../interface/TreeReader_v38.h"
+#elif TREEREADER_VER >= 39
+#include "../interface/TreeReader_v39.h"
 #endif
-#include "../References/Variables.h" // Must follow DataStruct
-#include "../Resources/Sources/Includes/SmartHistos/Custom_smart_histos.hh"
+#include "../interface/Variables.h" // Must follow DataStruct
+#include "../interface/SmartHistos.h"
 #include "TEnv.h"
 
 class TreeLooper {
@@ -306,6 +308,7 @@ class TreeLooper {
     var_->load_traj_var(tr_->traj_evt(),tr_->traj());
     if (debug) { std::cout<<"load_traj_var ok\n"; }
     // Parallel loop on lumiTree (need for RAW)
+#ifndef EXPRESS
     if (alllumis_>0) if (tr_->traj_evt().ls!=lscheck_||tr_->traj_evt().run!=runcheck_) { // if new lumisection found
       process_lumi_(lumientry);
       // Get same ls as in trajTree
@@ -313,6 +316,7 @@ class TreeLooper {
   lumientry++; process_lumi_(lumientry);
       }
     }
+#endif
     if (debug) { std::cout<<"parallel loop ok\n"; }
     Int_t clust_succ = 1;
     //if (clustloop_==2) {

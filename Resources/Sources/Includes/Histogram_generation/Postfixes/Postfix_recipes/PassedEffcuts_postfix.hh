@@ -16,8 +16,6 @@ extern bool debug;
 
 class PassedEffcuts_postfix : public Postfix
 {
-	private:
-		Histogram_generation::Cut* effcut_all;
 	public:
 		PassedEffcuts_postfix(Ntuple_reader*& ntuple_reader_p);
 		~PassedEffcuts_postfix() 
@@ -32,14 +30,13 @@ class PassedEffcuts_postfix : public Postfix
 PassedEffcuts_postfix::PassedEffcuts_postfix(Ntuple_reader*& ntuple_reader_p)
 {
 	this -> name       = "PassedEffcuts";
-	this -> effcut_all = Histogram_generation::Cut_factory::get_cut("effcut_all", ntuple_reader_p).get();
 	this -> sel        = [&ntuple_reader_p, this]()
 	{
-		if((*(this -> effcut_all))())
+		if(ntuple_reader_p -> get_histogram_requests() -> get_cut_boolean("effcut_all"))
 		{
-			return 0;
+			return 1;
 		}
-		return 1;
+		return 0;
 	};
 	this -> pf = "PassedEffcuts;CaughtByEffcuts";
 	this -> leg = "PassedEffcuts;CaughtByEffcuts";

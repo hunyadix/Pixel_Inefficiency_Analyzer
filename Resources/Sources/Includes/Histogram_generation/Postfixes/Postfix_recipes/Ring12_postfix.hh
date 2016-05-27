@@ -37,11 +37,11 @@ Ring12_postfix::Ring12_postfix(Ntuple_reader*& ntuple_reader_p)
 		{
 			return -1;
 		}
-		// 1: 2/2 - 1 = 0
-		// 2: 3/2 - 1 = 0
-		// 3: 4/2 - 1 = 1
-		// 4: 5/2 - 1 = 1
-		return static_cast<int>(std::abs(ntuple_reader_p -> get_module_field_ptr() -> module + 1) / 2) - 1;
+		if(std::abs(ntuple_reader_p -> get_module_field_ptr() -> module) > 2)
+		{
+			return 1;
+		}
+		return 0;
 	};
 	this -> pf = "Ring12;Ring34";
 	this -> leg = "Ring 1, 2;Ring 3, 4";

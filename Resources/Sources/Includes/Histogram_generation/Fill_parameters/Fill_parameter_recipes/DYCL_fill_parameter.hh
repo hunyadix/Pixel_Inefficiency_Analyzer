@@ -31,13 +31,13 @@ DYCL_fill_parameter::DYCL_fill_parameter(Ntuple_reader*& ntuple_reader_p)
 {
 	this -> name = "DYCL";
 	this -> nbin = 2000; 
-	this -> bins = { 0.0, 10.0 };
+	this -> bins = { 0.0, 100000.0 };
 	this -> fill = [&ntuple_reader_p]()
 	{
-		float dy_cl = ntuple_reader_p -> get_traj_field_ptr() -> dy_cl[0];
+		float dy_cl = ntuple_reader_p -> get_traj_field_ptr() -> dy_cl[0] * 10000.0;
 		return dy_cl;
 	};
-	this -> axis_title = "Distance to closest cluster in y direction (cm)"; 
+	this -> axis_title = "Distance to closest cluster in y direction (#mum)"; 
 }
 
 #endif

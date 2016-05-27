@@ -1408,7 +1408,7 @@ private:
     era_and_prelim_lat_(xmin, xmax, ymin, ymax, approval);
   }
   void era_and_prelim_lat_(double xmin, double xmax, double ymin, double ymax, bool approval, bool in=0) {
-    std::string era = "#sqrt{s}=13 TeV (25ns)";
+    std::string era = "#sqrt{s}=8 TeV (50ns)";
     TLatex* era_lat = new TLatex(xmax, ymax+(ymax-ymin)/25.0, era.c_str());
     era_lat->SetTextAlign(32);
     era_lat->SetTextSize(0.04);
@@ -2093,7 +2093,7 @@ public:
   
   typedef struct HistoParams { std::string fill; std::vector<std::string> pfs; std::vector<std::string> cuts; std::string draw; std::string opt; std::vector<double> ranges; } HistoParams;
   
-  void AddHistos(std::string name, HistoParams hp, bool AddCutsToTitle = true, const bool debug = 0) {
+  void AddHistos(std::string name, HistoParams hp, bool AddCutsToTitle = false, const bool debug = 0) {
     if (debug) std::cout<<"Start adding: "<<name<<std::endl;
     if (sh_.count(name)) {
       std::pair<std::vector<std::string>, std::vector<FillParams> > hp_vec = get_hp_vec_(hp.fill);

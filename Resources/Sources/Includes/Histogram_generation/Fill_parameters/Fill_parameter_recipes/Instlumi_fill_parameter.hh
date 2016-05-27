@@ -114,9 +114,10 @@ Instlumi_fill_parameter::Instlumi_fill_parameter(Ntuple_reader*& ntuple_reader_p
 
 		else
 		{
-			int run = ntuple_reader_p -> get_event_field_ptr() -> run;
-			int lumisection = ntuple_reader_p -> get_event_field_ptr() -> ls;
-			double instlumi = this -> instlumi_map[std::make_pair(run, lumisection)] / 23.3104;
+			EventData* event_field_ptr = ntuple_reader_p -> get_event_field_ptr();
+			int run                    = event_field_ptr -> run;
+			int lumisection            = event_field_ptr -> ls;
+			double instlumi            = this -> instlumi_map[std::make_pair(run, lumisection)] / 23.3104;
 			if(instlumi == 0)
 			{
 				std::pair<int, int> run_ls_pair = std::make_pair(run, lumisection);

@@ -15,13 +15,15 @@
 class Custom_smart_histos : public SmartHistos
 {
 	private:
+		typedef bool update_state;
+
 		std::vector<std::string> tree_type_keyword_list;
 
 		/////////////////////
 		// Fill parameters //
 		/////////////////////
 
-		std::map<std::string, double> fill_param_name_to_fill_param_double_map;
+		std::map<std::string, std::pair<double, update_state>> fill_param_name_to_fill_param_double_map;
 		std::map<std::string, Fill_parameter*> fill_param_name_to_fill_param_object_map;
 		std::map<std::string, std::vector<std::string>> tree_name_to_fill_param_name_collection_map;
 
@@ -29,7 +31,7 @@ class Custom_smart_histos : public SmartHistos
 		// Postfixes //
 		///////////////
 
-		std::map<std::string, size_t> postfix_name_to_postfix_size_t_map;
+		std::map<std::string, std::pair<size_t, update_state>> postfix_name_to_postfix_size_t_map;
 		std::map<std::string, Postfix*> postfix_name_to_postfix_object_map;
 		std::map<std::string, std::vector<std::string>> tree_name_to_postfix_name_collection_map;
 
@@ -37,7 +39,7 @@ class Custom_smart_histos : public SmartHistos
 		// Cuts //
 		//////////
 
-		std::map<std::string, bool> cut_name_to_cut_boolean_map;
+		std::map<std::string, std::pair<bool, update_state>> cut_name_to_cut_boolean_map;
 		std::map<std::string, Histogram_generation::Cut*> cut_name_to_cut_object_map;
 		std::map<std::string, std::vector<std::string>> tree_name_to_cut_name_collection_map;
 
@@ -51,12 +53,16 @@ class Custom_smart_histos : public SmartHistos
 		Key_type find_key_in_map(std::map<Key_type, Value_type>& map_to_search, Value_type& value_to_find);
 
 	public:
+		const bool& get_cut_boolean(const std::string& name);
 
 		void AddHistoType(std::string type);
 		void AddNewFillParam(std::unique_ptr<Fill_parameter>& fill_parameter);
 		void AddNewPostfix(std::unique_ptr<Postfix>& postfix_p);
 		void AddNewCut(std::unique_ptr<Histogram_generation::Cut>& cut_p);
 		void AddHistos(std::string tree_type, HistoParams hp, bool AddCutsToTitle = true);
+		void SetFillParameterStatesUnupdated();
+		void SetPostfixStatesUnupdated();
+		void SetCutStatesUnupdated();
 		void UpdateFillParameter(const std::string& name);
 		void UpdatePostfix(const std::string& name);
 		void UpdateCut(const std::string& name);

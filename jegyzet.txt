@@ -139,3 +139,78 @@ de az események nem azokhoz az eseményekhez tartoznak időben, amihez kellene.
 Egy triggerelt esemény felírása után nem tudjuk rögzíteni a következő két eseményt (óraciklust)
 
 A ROC szelekció lényege, hogy csak azokat a ROC-okat nézem, amelyek nem mentek át single event upseten.
+Az instlumi efficiency arány a modul négyen sokszorosa a modul 1-en mérhetőnek.
+A hatásfok méréssel gond van nagy eta-ban, ez bele van skálázva a dcol hatásfokban
+
+Pl. egészséges klaszterek vizsgálatával rekonstruált elektronok száma csökken az így skálázott rendszerben.
+
+# Ambiguous és unambiguous hitek
+
+Az egyértelmű klaszter hozzárendeléssel rendelkező hitek 0 és 100 mikron közötti távolságra helyezkedtek el minden layeren,
+az 500 mikronon kívül eső legközelebbi klaszterek hányada ~3%-ra becsülhető. (43% 52% 5%)
+
+A nem egyértelmű hitek szinte pontosan ezt a 3%-nak megfelelő hitszámot tartalmazzák, és szinte pontosan megfelel a vártnak a három layer alakja.
+
+# Vázlat a paraméterfüggés fejezetéhez
+
+ELső függés:     luminozitástól  való függés, luminozitáseloszlás.
+Második függés:  layer függés luminozitáson keresztül + layer efficiency eloszlás
+Harmadik függés: modulfüggés luminozitáson (részecskefluxus) keresztül
+Negyedik függés: modulfüggés kúpszögön keresztül
+Ötödik függés:   beesési szögfüggés lokális koordinátarendszerben
+
+# Feladat: a modulokra eső fluxus kimérése
+
+# Lokális koordinátarendszerben a szögfüggés
+
+
+# Klasztere távolságok 
+Integrált drcl, drcl_second_cluster vágás.eloszlása
+
+# Az új Phase-1 detektor ROC-jainak tesztelése
+Az új detektornak különböző típusú moduljai lesznek az 1-es layeren és a többi layeren.
+
+A 2-3-4es layer chipjei:
+A ROC-ok a jelenlegi ROC-oknak a továbbfejlesztett változatai. Fő módosítások: a buffer megnövekedése, analóg digitális átalakító belekerülése.
+
+Várakozások:
+Az új ROC-oknak valamivel jobb lesz a hatásfokvesztése a megnövekedett bufferméret miatt.
+
+Az 1-es layer közelebb került a detektorhoz (nagyobb a geometriából származó fluxus-faktor), és közben a pileup is növekedni fog. Ez egy olyan kihívást 
+jelent a ROC-ok számára, amelyet az eddig használt design képtelen lenne kezelni.
+
+Egy részecske áthaladása során általában nem egy, hanem legalább 2-3 már a Lorentz-drift miatt. Ezt túl sok idő egyenként lehozni.
+
+A kiolvasó elekronika eddigi működése:
+Ha megszólalt egy pixel, az szól a duplaolszlop kiolvasó elektronikának, hogy hit történt, ezeket a jeleket pedig a duplaoszlop egyenként juttatja át a duplaoszlopok kiolvasó-elektronikájába.
+
+Az új rendszerben nem egyenként történik a pixelek kiolvasása, hanem amikor megtörténik egy pixel-hit -> egyből lehoznak egy 2x2 mátrixot a duplaoszlop kiolvasó perifériájába.
+
+Ezen chip valójában még csak most készült el, és elképzelhető, hogy nem lesz kész időben a chip használatra.
+A layer 2-3-4-hez annyi tartalék modul készül, hogy össze lehet belőle rakni egy layer 1-es barrelt is.
+
+Kérdés:
+A layer 2-es design tudja-e kezelni a layer 1-es luminozitást + milyen hatásfokvesztésre számíthatunk abban az esetben, ha a ez a szenárió fog bekövetkezni.
+->  Ha a válasz nem, nem feltétlenül érdemes lecserélni a Phase-0 detektort egy 3 réteget tartalmazó Phase-1 detektorra, a CMS ezért azzal a feltétellel hajlandó 
+	az adatgyűjtést leállítani a detektor cseréjének idejére, ha a berakott új detektor jobb adatot fog gyűjteni, mint az eddigi.
+
+Amikor megcsinálták a layer 2-es chipet, beletették egy tesztnyalábba, hogy megnézzék, hogy hogyan működik, és milyenek a hatásfokvesztések.
+A chipek tervezése azzal kezdődik, hogy leszimulálják a chipek működését, és mikor a szimuláció eredményei azt mutatják, hogy jó lesz a prototípus, akkor kezdenek csak bele a legyártásába.
+A Phase-1 upgrade 2-es layerére valahol létezik ez a szimuláció.
+
+Arra lenne szükség, hogy megszerezzök a ROC-szimulátor kódot. Ha nem:
+-> Feltételezzük, hogy a trigger ráta az 50 kHz. Ekkor valahogy le kell fordítani a függvény által adott pixel-rátát LHC realisztikus  
+
+Határidő a vizsgálatok megkezdésére: 2016. június közepe
+
+-> # Rossini thesis
+
+Magas hit rátájú hatásfok-mérések:
+
+36  MHz / cm^2 -> ~100% körül csúcs
+110 MHz / cm^2 -> ~99%  körül csúcs
+254 MHz / cm^2 -> -90%  körül csúcs
+
+A hatásfok összefügg a kalibrációs jel késleltetésével (ütközéseknél nincs ilyen)
+Gammáknál nem jó a mérési eredmény a timestamp buffer hatására (ennek overflowja a hatásfokot korlátozó faktor), mivel elhanyagolható annak az esélye, hogy két gamma azonos duplaoszlopot találjon el.
+-> Valódi töltött részecskék esetében a timestamp buffer rátája jóval alacsonyabb.

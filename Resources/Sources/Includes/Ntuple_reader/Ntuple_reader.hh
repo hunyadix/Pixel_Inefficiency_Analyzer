@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <functional>
 #include <stdexcept>
 
 extern bool debug;
@@ -22,7 +23,9 @@ class Ntuple_reader : public Tree_initializer
 		std::vector<std::string>     input_file_path_list;
 		int                          schedule = 0;
 		bool                         saved_before = false;
-		void tree_loop(TTree* tree_p, std::string& tree_name_p);
+		void conditional_loop_files(bool condition, const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
+		void loop_files(const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
+		void tree_loop(TTree* tree_p, const std::string& tree_name_p);
 		void event_tree_loop();
 		void lumi_tree_loop();
 		void run_tree_loop();
@@ -45,10 +48,11 @@ class Ntuple_reader : public Tree_initializer
 		Ntuple_reader();
 		Ntuple_reader(std::string filename_p);
 		~Ntuple_reader();
-		void read_input_paths_from_file(const std::string& input_paths_file_path_p);
-		void debug_print_current_input_name() { std::cerr << debug_prompt << this -> get_input_file_name() << std::endl; };
 		void set_schedule(int schedule_p);
-		void set_histogram_requests(Custom_smart_histos*     histogram_requests_p);
+		void set_histogram_requests(Custom_smart_histos* histogram_requests_p);
+		Custom_smart_histos* get_histogram_requests();
+		void read_input_paths_from_file(const std::string& input_paths_file_path_p);
+		void debug_print_current_input_name();
 		void run();
 };
 

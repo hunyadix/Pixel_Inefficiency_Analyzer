@@ -6,6 +6,12 @@ MAIN_A = Pixel_Inefficiency_Analyzer$(ExeSuf)
 OBJS          += $(MAIN_O)
 PROGRAMS      += $(MAIN_A)
 
+PLOT_ADDER_S = ./Resources/Sources/Programs/plot_adder.$(SrcSuf)
+PLOT_ADDER_O = ./Resources/Objects/plot_adder.$(ObjSuf)
+PLOT_ADDER_A = Plot_adder$(ExeSuf)
+OBJS          += $(PLOT_ADDER_O)
+#PROGRAMS      += $(PLOT_ADDER_A)
+
 CONSOLE_COL_S = ./Resources/Sources/Includes/Console_colors/Console_colors.$(SrcSuf)
 CONSOLE_COL_O = ./Resources/Objects/Console_colors.$(ObjSuf)
 OBJS          += $(CONSOLE_COL_O)
@@ -42,8 +48,15 @@ OBJS          += $(CUSTOM_SMART_HISTOS_O)
 .SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
 
 all:                  $(PROGRAMS)
+plot_adder:           $(PLOT_ADDER_A)
 
 $(MAIN_A): $(MAIN_O) $(FITTER_O) $(CONSOLE_COL_O) $(CONSOLE_ACTOR_O) $(COMMON_ACTORS_O) $(TIMER_O) $(TIMER_COL_O) $(ROOT_COLOR_SETS_O) $(INPUT_OUTPUT_INTERFACE_O) $(TREE_INITIALIZER_O) $(NTUPLE_READER_O) $(CUSTOM_SMART_HISTOS_O)
+	@printf "Compiling done, linking...\n"
+	@$(LD) $(LDFLAGS) $^ $(LIBS) $(OutPutOpt)$@
+	$(MT_EXE)
+	@echo "Succesful make..."
+	@echo "...$@ is ready to use."
+$(PLOT_ADDER_A): $(PLOT_ADDER_O) $(FITTER_O) $(CONSOLE_COL_O) $(CONSOLE_ACTOR_O) $(COMMON_ACTORS_O) $(TIMER_O) $(TIMER_COL_O) $(ROOT_COLOR_SETS_O) $(INPUT_OUTPUT_INTERFACE_O) $(TREE_INITIALIZER_O) $(NTUPLE_READER_O) $(CUSTOM_SMART_HISTOS_O)
 	@printf "Compiling done, linking...\n"
 	@$(LD) $(LDFLAGS) $^ $(LIBS) $(OutPutOpt)$@
 	$(MT_EXE)
@@ -54,6 +67,11 @@ $(MAIN_O): $(MAIN_S)
 	@printf "Compiling main...\n"
 	@$(CXX) $(CXXFLAGS) $(LIBS) -c $< $(OutPutOpt)$@
 	@printf "Main compiled.\n"
+$(PLOT_ADDER_O): $(PLOT_ADDER_S)
+	@printf "Compiling plot_adder...\n"
+	@$(CXX) $(CXXFLAGS) $(LIBS) -c $< $(OutPutOpt)$@
+	@printf "Plot adder compiled.\n"
+
 $(CONSOLE_COL_O): $(CONSOLE_COL_S)
 	@printf "Compiling console colors...\n"
 	@$(CXX) $(CXXFLAGS) $(LIBS) -c $< $(OutPutOpt)$@
