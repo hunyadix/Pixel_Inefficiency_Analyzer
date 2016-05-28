@@ -179,8 +179,8 @@ int main(int argc, char** argv)
 // FPix check for run  //
 /////////////////////////
 
-		// input_file_paths_file_name  = "Data/2016_run_273725_no_cut.txt";
-		input_file_paths_file_name  = "Data/debug_2016_run_273725_no_cut.txt";
+		input_file_paths_file_name  = "Data/2016_run_273725_no_cut.txt";
+		// input_file_paths_file_name  = "Data/debug_2016_run_273725_no_cut.txt";
 		firts_loop_output_file_name = "Results/FPix_check/step_1.root";
 		analysis_output_name        = "Results/FPix_check/step_2.root";
 		second_loop_output_name     = "Results/FPix_check/step_3.root";

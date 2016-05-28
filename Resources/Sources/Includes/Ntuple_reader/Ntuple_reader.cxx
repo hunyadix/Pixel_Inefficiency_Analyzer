@@ -43,18 +43,22 @@ void Ntuple_reader::loop_files(const std::string& selected_tree_name, const std:
 
 int Ntuple_reader::check_tree_existence(const std::function<TTree*()> tree_preparation_function)
 {
-		for(auto file_path_ptr: input_file_path_list)
+	int is_unchanged = 1;
+	auto remove_checker = [this, &is_unchanged, &tree_preparation_function] (std::string file_path_ptr)
+	{
+		this -> change_input_file(file_path_ptr);
+		TTree* tree = tree_preparation_function();
+		if(!(tree -> GetEntries()))
 		{
-			this -> change_input_file(file_path_ptr);
-			TTree* tree = tree_preparation_function();
-			if(!(tree -> GetEntries()))
-			{
-				std::cerr << error_prompt << "Tree reading error." << std::endl;
-				this -> debug_print_current_input_name();
-				return 0;
-			}
+			std::cerr << error_prompt << "Tree reading error." << std::endl;
+			this -> debug_print_current_input_name();
+			is_unchanged = 0;
+			return 1;
 		}
-		return 1;
+		return 0;
+	};
+	std::remove_if(input_file_path_list.begin(), input_file_path_list.end(), remove_checker);
+	return is_unchanged;
 }
 
 int Ntuple_reader::check_tree_existences()
@@ -174,8 +178,8 @@ void Ntuple_reader::run()
 	}
 	if(!(this -> check_tree_existences()))
 	{
-		std::cerr << error_prompt << "Error reading some of the trees..." << std::endl;
-		exit(-1);
+		std::cerr << error_prompt << "Error reading the trees: Some of the trees were removed from the query." << std::endl;
+		// exit(-1);
 	}
 	auto event_tree_loop = bind(&Ntuple_reader::tree_loop, this, static_cast<std::function<TTree*()>>(bind(&Ntuple_reader::prepare_to_run_on_event_tree, this)), "eventTree");
 	auto lumi_tree_loop  = bind(&Ntuple_reader::tree_loop, this, static_cast<std::function<TTree*()>>(bind(&Ntuple_reader::prepare_to_run_on_lumi_tree, this)),  "lumiTree");
