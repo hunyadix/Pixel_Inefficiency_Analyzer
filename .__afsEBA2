@@ -1,0 +1,104 @@
+nohup: ignoring input
+80
+0
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol80_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 0 (eff: 80) started with PID: 25492.
+90
+1
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol90_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 1 (eff: 90) started with PID: 25592.
+95
+2
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol95_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 2 (eff: 95) started with PID: 25717.
+97
+3
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol97_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 3 (eff: 97) started with PID: 25833.
+98
+4
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol98_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 4 (eff: 98) started with PID: 25928.
+99
+5
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol99_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 5 (eff: 99) started with PID: 26021.
+99p3
+6
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol99p3_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 6 (eff: 99p3) started with PID: 26114.
+99p6
+7
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol99p6_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 7 (eff: 99p6) started with PID: 26221.
+99p9
+8
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol99p9_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 8 (eff: 99p9) started with PID: 26314.
+100
+9
+Compiling main...
+Resources/Sources/Programs/main.cxx: In function 'int main(int, char**)':
+Resources/Sources/Programs/main.cxx:125:3: error: 'second_loop_output_file_name' was not declared in this scope
+   second_loop_output_file_name = "Results/Dcolscans/dcol100_with_filtering.root";
+   ^
+make: *** [Resources/Objects/main.o] Error 1
+mv: cannot stat `Pixel_Inefficiency_Analyzer': No such file or directory
+Process number 9 (eff: 100) started with PID: 26410.
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+Shared_scripts/start_dcol_processes.sh: line 33: kill: CONTINUE: invalid signal specification
+Shared_scripts/start_dcol_processes.sh: line 33: kill: CONTINUE: invalid signal specification

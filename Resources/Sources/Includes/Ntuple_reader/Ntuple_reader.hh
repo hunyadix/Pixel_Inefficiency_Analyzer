@@ -27,12 +27,7 @@ class Ntuple_reader : public Tree_initializer
 		int check_tree_existences();
 		void conditional_loop_files(bool condition, const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
 		void loop_files(const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
-		void tree_loop(TTree* tree_p, const std::string& tree_name_p);
-		void event_tree_loop();
-		void lumi_tree_loop();
-		void run_tree_loop();
-		void traj_tree_loop();
-		void clust_tree_loop();
+		void tree_loop(std::function<TTree*()>& tree_preparation_function, const std::string& tree_name_p);
 		void save_histogram_list();
 	public:
 		enum Loop_request_flags

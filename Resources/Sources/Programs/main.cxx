@@ -148,12 +148,12 @@ int main(int argc, char** argv)
 // General purpose check (data and mc) //
 /////////////////////////////////////////
 
-		input_file_paths_file_name  = "Data/debug_list.txt";
-		// input_file_paths_file_name  = "Data/PIA_debug.txt";
-		firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
-		analysis_output_name        = "Results/Debug/debug_data_step_2.root";
-		second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
-		second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
+		// input_file_paths_file_name  = "Data/debug_list.txt";
+		// // input_file_paths_file_name  = "Data/PIA_debug.txt";
+		// firts_loop_output_file_name = "Results/Debug/debug_data_step_1.root";
+		// analysis_output_name        = "Results/Debug/debug_data_step_2.root";
+		// second_loop_output_name     = "Results/Debug/debug_data_step_3.root";
+		// second_analysis_output_name = "Results/Debug/debug_data_step_4.root";
 
 //////////////////////
 // 2012 Monte-Carlo //
@@ -180,10 +180,11 @@ int main(int argc, char** argv)
 /////////////////////////
 
 		// input_file_paths_file_name  = "Data/2016_run_273725_no_cut.txt";
-		// firts_loop_output_file_name = "Results/FPix_check/step_1.root";
-		// analysis_output_name        = "Results/FPix_check/step_2.root";
-		// second_loop_output_name     = "Results/FPix_check/step_3.root";
-		// second_analysis_output_name = "Results/FPix_check/step_4.root";
+		input_file_paths_file_name  = "Data/debug_2016_run_273725_no_cut.txt";
+		firts_loop_output_file_name = "Results/FPix_check/step_1.root";
+		analysis_output_name        = "Results/FPix_check/step_2.root";
+		second_loop_output_name     = "Results/FPix_check/step_3.root";
+		second_analysis_output_name = "Results/FPix_check/step_4.root";
 
 ////////////////////////////////////////////////////
 // Data or simulation (for instlumi calculation)  //
@@ -206,7 +207,7 @@ int main(int argc, char** argv)
 // Extra cut selection //
 /////////////////////////
 
-		bool add_custom_extra_cut = false;
+		bool add_custom_extra_cut = true;
 
 /////////////////////////////
 // Read bad ROCs from file //
