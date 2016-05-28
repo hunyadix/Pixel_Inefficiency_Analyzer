@@ -34,11 +34,11 @@ class Tree_initializer : public Input_output_interface
 		void     tree_check(TTree* tree_p, std::string error_message_p);
 		void     branch_check(TTree* tree_p, const std::string& branch_name_p);
 		TBranch* check_get_branch(TTree* tree_p, const std::string& branch_name_p);
-		void     prepare_to_run_on_event_tree();
-		void     prepare_to_run_on_lumi_tree();
-		void     prepare_to_run_on_run_tree();
-		void     prepare_to_run_on_traj_tree();
-		void     prepare_to_run_on_clust_tree();
+		TTree*   prepare_to_run_on_event_tree();
+		TTree*   prepare_to_run_on_lumi_tree();
+		TTree*   prepare_to_run_on_run_tree();
+		TTree*   prepare_to_run_on_traj_tree();
+		TTree*   prepare_to_run_on_clust_tree();
 		void     clear_fields();
 		//void init_trees();
 

@@ -116,9 +116,6 @@ int main(int argc, char** argv)
 // Data for validation //
 /////////////////////////
 
-		// # A legkozelebbi szomszed atlagos tavolsaga:
-		// <R> = 0.5 * N_alpha^1/2, ahol N_alpha a részecskék sűrűsége
-
 		// input_file_paths_file_name   = "Data/Dcolscans/dcol100_paths.txt";
 		// firts_loop_output_file_name  = "Results/Dcolscans/dcol100.root";
 		// analysis_output_name         = "Results/Dcolscans/dcol100_stats.root";
@@ -209,7 +206,7 @@ int main(int argc, char** argv)
 // Extra cut selection //
 /////////////////////////
 
-		bool add_custom_extra_cut = true;
+		bool add_custom_extra_cut = false;
 
 /////////////////////////////
 // Read bad ROCs from file //

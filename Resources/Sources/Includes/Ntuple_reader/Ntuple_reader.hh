@@ -23,6 +23,8 @@ class Ntuple_reader : public Tree_initializer
 		std::vector<std::string>     input_file_path_list;
 		int                          schedule = 0;
 		bool                         saved_before = false;
+		int check_tree_existence(const std::function<TTree*()> tree_preparation_function);
+		int check_tree_existences();
 		void conditional_loop_files(bool condition, const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
 		void loop_files(const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop);
 		void tree_loop(TTree* tree_p, const std::string& tree_name_p);

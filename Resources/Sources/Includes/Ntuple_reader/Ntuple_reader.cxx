@@ -45,13 +45,55 @@ void Ntuple_reader::conditional_loop_files(bool condition, const std::string& se
 
 void Ntuple_reader::loop_files(const std::string& selected_tree_name, const std::function<void()>& selected_tree_loop)
 {
-		for(auto file_path_ptr = this -> input_file_path_list.begin(); file_path_ptr != this -> input_file_path_list.end(); ++file_path_ptr)
+	for(auto file_path_ptr = this -> input_file_path_list.begin(); file_path_ptr != this -> input_file_path_list.end(); ++file_path_ptr)
+	{
+		this -> change_input_file(*file_path_ptr);
+		std::cout << process_prompt << "Looping on tree: " << selected_tree_name << std::left << std::setw(36) << ".";
+		selected_tree_loop();
+		std::cout << "   " << file_path_ptr - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
+	}
+}
+
+int Ntuple_reader::check_tree_existence(const std::function<TTree*()> tree_preparation_function)
+{
+		for(auto file_path_ptr: input_file_path_list)
 		{
-			this -> change_input_file(*file_path_ptr);
-			std::cout << process_prompt << "Looping on tree: " << selected_tree_name << std::left << std::setw(35) << ".";
-			selected_tree_loop();
-			std::cout << "   " << file_path_ptr - this -> input_file_path_list.begin() + 1 << "/" << this -> input_file_path_list.size() << std::endl;
+			this -> change_input_file(file_path_ptr);
+			TTree* tree = tree_preparation_function();
+			if(!(tree -> GetEntries()))
+			{
+				std::cerr << error_prompt << "Tree reading error." << std::endl;
+				this -> debug_print_current_input_name();
+				return 0;
+			}
 		}
+		return 1;
+}
+
+int Ntuple_reader::check_tree_existences()
+{
+	int result = 1;
+	if(this -> schedule & Loop_request_flags::event_tree_loop_request)
+	{
+		result &= check_tree_existence(std::bind(&Ntuple_reader::prepare_to_run_on_event_tree, this));
+	}
+	if(this -> schedule & Loop_request_flags::lumi_tree_loop_request)
+	{
+		result &= check_tree_existence(std::bind(&Ntuple_reader::prepare_to_run_on_lumi_tree, this));
+	}
+	if(this -> schedule & Loop_request_flags::run_tree_loop_request)
+	{
+		result &= check_tree_existence(std::bind(&Ntuple_reader::prepare_to_run_on_run_tree, this));
+	}
+	if(this -> schedule & Loop_request_flags::clust_tree_loop_request)
+	{
+		result &= check_tree_existence(std::bind(&Ntuple_reader::prepare_to_run_on_clust_tree, this));
+	}
+	if(this -> schedule & Loop_request_flags::traj_tree_loop_request)
+	{
+		result &= check_tree_existence(std::bind(&Ntuple_reader::prepare_to_run_on_traj_tree, this));
+	}
+	return result;
 }
 
 void Ntuple_reader::tree_loop(TTree* tree_p, const std::string& tree_name_p)
@@ -61,7 +103,9 @@ void Ntuple_reader::tree_loop(TTree* tree_p, const std::string& tree_name_p)
 	std::cout << std::setw(4) << "  0%";
 	std::streambuf *coutbuf = std::cout.rdbuf(); // Saving the old buffer and redirecting it
 	std::cout.rdbuf(this -> histogram_requests_output.rdbuf());
-	// Only use the std::cerr stream here for debugging!
+///////////////////////////////////////////////////////
+// Only use the std::cerr stream here for debugging! //
+///////////////////////////////////////////////////////
 	try
 	{
 		if(n_entries == 0)
@@ -75,8 +119,6 @@ void Ntuple_reader::tree_loop(TTree* tree_p, const std::string& tree_name_p)
 			tree_p -> GetEntry(i);
 			// std::cerr << debug_prompt << "updating..." << std::endl;
 			this -> histogram_requests -> UpdateRelevantFillParametersPostfixesCuts(tree_name_p);
-			// this -> get_relevant_cuts_for_tree(tree_name_p) -> calculate_cuts();
-			// Histogram_generation::Cut_factory::get_relevant_cuts_for_tree
 			// std::cerr << debug_prompt << "filling..." << std::endl;
 			this -> histogram_requests -> Fill(tree_name_p); // do not try moving here :)
 			// std::cerr << debug_prompt << "Fill called." << std::endl; std::cin.get();
@@ -182,7 +224,7 @@ void Ntuple_reader::read_input_paths_from_file(const std::string& input_paths_fi
 void Ntuple_reader::debug_print_current_input_name()
 {
 	std::cerr << debug_prompt << this -> get_input_file_name() << std::endl;
-};
+}
 
 void Ntuple_reader::run()
 {
@@ -191,12 +233,17 @@ void Ntuple_reader::run()
 		std::cerr << error_prompt << "Error in Ntuple_reader::run(): unset histogram_requests." << std::endl;
 		exit(-1);
 	}
+	if(!(this -> check_tree_existences()))
+	{
+		std::cerr << error_prompt << "Error reading some of the trees..." << std::endl;
+		exit(-1);
+	}
 	// Tree names do not matter here
-	conditional_loop_files((this -> schedule & Loop_request_flags::event_tree_loop_request), "event_tree", std::bind(&Ntuple_reader::event_tree_loop, this));
-	conditional_loop_files((this -> schedule & Loop_request_flags::lumi_tree_loop_request),  "lumi_tree",  std::bind(&Ntuple_reader::lumi_tree_loop, this));
-	conditional_loop_files((this -> schedule & Loop_request_flags::run_tree_loop_request),   "run_tree",   std::bind(&Ntuple_reader::run_tree_loop, this));
-	conditional_loop_files((this -> schedule & Loop_request_flags::clust_tree_loop_request), "clust_tree", std::bind(&Ntuple_reader::clust_tree_loop, this));
-	conditional_loop_files((this -> schedule & Loop_request_flags::traj_tree_loop_request),  "traj_tree",  std::bind(&Ntuple_reader::traj_tree_loop, this));
+	this -> conditional_loop_files((this -> schedule & Loop_request_flags::event_tree_loop_request), "event_tree", std::bind(&Ntuple_reader::event_tree_loop, this));
+	this -> conditional_loop_files((this -> schedule & Loop_request_flags::lumi_tree_loop_request),  "lumi_tree",  std::bind(&Ntuple_reader::lumi_tree_loop, this));
+	this -> conditional_loop_files((this -> schedule & Loop_request_flags::run_tree_loop_request),   "run_tree",   std::bind(&Ntuple_reader::run_tree_loop, this));
+	this -> conditional_loop_files((this -> schedule & Loop_request_flags::clust_tree_loop_request), "clust_tree", std::bind(&Ntuple_reader::clust_tree_loop, this));
+	this -> conditional_loop_files((this -> schedule & Loop_request_flags::traj_tree_loop_request),  "traj_tree",  std::bind(&Ntuple_reader::traj_tree_loop, this));
 	std::cout << process_prompt << std::left << std::setw(45) << "Looping finished." << std::endl;
 	std::cout << process_prompt << "Saving histograms: " << std::left << std::setw(30) << "in progress." << std::flush;
 	this -> save_histogram_list();

@@ -47,31 +47,34 @@ TBranch* Tree_initializer::check_get_branch(TTree* tree_p, const std::string& br
 	return branch;
 }
 
-void Tree_initializer::prepare_to_run_on_event_tree()
+TTree* Tree_initializer::prepare_to_run_on_event_tree()
 {
 	this -> clear_fields();
 	this -> event_tree = (TTree*)(this -> input_file -> Get("eventTree"));
 	this -> tree_check(this -> event_tree, "Error opening the eventTree.");
 	this -> check_get_branch(event_tree, "event") -> SetAddress(&(this -> event_field));
+	return this -> event_tree;
 }
 
-void Tree_initializer::prepare_to_run_on_lumi_tree()
+TTree* Tree_initializer::prepare_to_run_on_lumi_tree()
 {
 	this -> clear_fields();
 	this -> lumi_tree = (TTree*)(this -> input_file -> Get("lumiTree"));
 	this -> tree_check(this -> lumi_tree, "Error opening the lumiTree.");
 	this -> check_get_branch(lumi_tree, "lumi") -> SetAddress(&(this -> lumi_field));
+	return this -> lumi_tree;
 }
 
-void Tree_initializer::prepare_to_run_on_run_tree()
+TTree* Tree_initializer::prepare_to_run_on_run_tree()
 {
 	this -> clear_fields();
 	this -> run_tree = (TTree*)(this -> input_file -> Get("runTree"));
 	this -> tree_check(this -> run_tree, "Error opening the runTree.");
 	this -> check_get_branch(run_tree, "run") -> SetAddress(&(this -> run_field));
+	return this -> run_tree;
 }
 
-void Tree_initializer::prepare_to_run_on_traj_tree()
+TTree* Tree_initializer::prepare_to_run_on_traj_tree()
 {
 	this -> clear_fields();
 	this -> traj_tree = (TTree*)(this -> input_file -> Get("trajTree"));
@@ -86,9 +89,10 @@ void Tree_initializer::prepare_to_run_on_traj_tree()
 	this -> check_get_branch(traj_tree, "track")     -> SetAddress(&(this -> traj_field.trk));
 	this -> check_get_branch(traj_tree, "track_eta") -> SetAddress(&(this -> traj_field.trk.eta));
 	this -> module_field_ptr = &(this -> traj_field.mod_on);
+	return this -> traj_tree;
 }
 
-void Tree_initializer::prepare_to_run_on_clust_tree()
+TTree* Tree_initializer::prepare_to_run_on_clust_tree()
 {
 	this -> clear_fields();
 	this -> clust_tree = (TTree*)(this -> input_file -> Get("clustTree"));
@@ -106,6 +110,7 @@ void Tree_initializer::prepare_to_run_on_clust_tree()
 	this -> check_get_branch(clust_tree, "clust_adc")    -> SetAddress(&(this -> cluster_field.adc));
 	this -> check_get_branch(clust_tree, "clust_pix")    -> SetAddress(&(this -> cluster_field.pix));
 	this -> module_field_ptr = &(this -> cluster_field.mod_on);
+	return this -> clust_tree;
 }
 
 void Tree_initializer::clear_fields()
